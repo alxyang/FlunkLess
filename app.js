@@ -7,7 +7,6 @@ var express = require('express')
   app.use(express.cookieParser() );
   app.use(express.session({ secret: 'nyan cat'}));
 
-
   var mongoose = require('mongoose');
   mongoose.connect('mongodb://cs121:cs121@oceanic.mongohq.com:10050/FlunkLess');
   var db = mongoose.connection;

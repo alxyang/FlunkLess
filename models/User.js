@@ -5,7 +5,8 @@ var Schema = mongoose.Schema
 var UserSchema = new Schema({
 	id : Number,
 	name : String,
-  rooms : [String]
+  rooms : [String],
+  email : String
 })
 
 var User = mongoose.model("User", UserSchema);
@@ -41,7 +42,7 @@ UserModel.prototype.removeClass = function(id,classid, callback){
 
 //Create a new User
 UserModel.prototype.save = function(params, callback) {
-  var person = new User({id : params.id, name : params.name, rooms : params.rooms});
+  var person = new User({id : params.id, name : params.name, rooms : params.rooms, email : params.email});
   person.save(function (err) {
     callback(person);
   });

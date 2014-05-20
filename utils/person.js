@@ -4,6 +4,7 @@ function Person(name, socketid) {
   this.id; // facebook id
   this.realname;
   this.rooms = []
+  this.email;
 };
 
 Person.prototype.addRoom = function(room){

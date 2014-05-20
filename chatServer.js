@@ -9,7 +9,8 @@ module.exports = function(server) {
   , roomPosts = {}
   , io = require('socket.io').listen(server)
   , utils = require('./utils/utils')
-  , purgatory = require('./utils/purge');
+  , purgatory = require('./utils/purge')
+  , emailUtil = require("./utils/email");
   io.set('log level', 1);
 
   var ClassModel = require("./models/Class").ClassModel;
@@ -48,15 +49,32 @@ function createRoom(data, visibility){
 function loadFBInfo(user, fbinfo, socket){
   user.id = fbinfo.id;
   user.realname = fbinfo.name;
+  user.email = fbinfo.email;
   userQuery.findByID(fbinfo.id, function(err, user){
     if(user === null){
-        userQuery.save({id : fbinfo.id, name : fbinfo.name , rooms : []}, function(user){
+        userQuery.save({id : fbinfo.id, name : fbinfo.name , rooms : [], email : fbinfo.email}, function(user){
           socket.fbUser = user;
         });
     }else{
       socket.fbUser = user;
     }
   });
+}
+
+function notifyUsers(roomid, type, data, sender){
+  userQuery.findAll(function(err, users){
+    users.forEach(function(user){
+      if(user.rooms.indexOf(roomid)>= 0){
+        var subject = "A " + type + " from " + sender;
+        if(type == "pin"){
+          emailUtil.email(user.email, subject, data.message, sender);
+        }else if(type == "link"){
+           emailUtil.email(user.email, subject, "The message was '"+data.message+"' and the link was " + data.link,
+            sender);
+        }
+      }
+    });
+  })
 }
 
   io.sockets.on('connection', function (socket) {
@@ -96,12 +114,6 @@ function loadFBInfo(user, fbinfo, socket){
     if (typeof people[socket.id] !== 'undefined') {
       var roomToJoin = rooms[id];
       var peopleIn = roomToJoin.getListOfPeople();
-
-      console.log(people[socket.id]);
-      if(_.contains(peopleIn, people[socket.id].name)){
-          console.log(people[socket.id].name + " is already in this room");
-      }
-
       socket.join(roomToJoin.id); // joins actual room
       roomToJoin.addPerson(people[socket.id]); // adds pointer to person from room
       people[socket.id].addRoom(roomToJoin); // adds pointer to room from person
@@ -122,9 +134,6 @@ function loadFBInfo(user, fbinfo, socket){
           }
         }
       }
-    // if (_.contains((room.people), socket.id)) {
-    //   console.log("already in this room")
-    // }
     });
 
  socket.on('leaveRoom', function(id) {
@@ -158,55 +167,27 @@ function loadFBInfo(user, fbinfo, socket){
       if(rooms[data.roomid] == null){
         return;
       }
-     
-      if(data.type=='message'){
-
-          //add whisper functionality
-          var re = /^[w]:.*:/;
-          var whisper = re.test(data.message);
-          var whisperStr = data.message.split(":");
-          var found = false;
-
-          //if whisper type detected
-          if (whisper) {
-            var whisperTo = whisperStr[1];
-            var keys = Object.keys(people);
-            if (keys.length != 0) {
-              for (var i = 0; i<keys.length; i++) {
-                if (people[keys[i]].name === whisperTo) {
-                  var whisperId = keys[i];
-                  found = true;
-                  if (socket.id === whisperId) { //can't whisper to ourselves
-                    socket.emit("update", "You can't whisper to yourself.");
-                  }
-                  break;
-                } 
-              }
-            }
-            if (found && socket.id !== whisperId) {
-              var whisperTo = whisperStr[1];
-              var whisperMsg = whisperStr[2];
-              console.log(whisperTo + " gets whispered: " + whisperMsg);
-              socket.emit("whisper", {name: "You"}, whisperMsg);
-              io.sockets.socket(whisperId).emit("whisper", people[socket.id], whisperMsg);
-            } else {
-              socket.emit("update", "Can't find " + whisperTo);
-            }
-          }
-      }else{
-        rooms[data.roomid].pinPost(data);
-      }
-      // console.log(rooms[data.roomid]);
-      if(!whisper){
-        //push post onto array of posts for particular room
-        rooms[data.roomid].addPost(data);
+      switch(data.type){
+        case "message" :  
+          rooms[data.roomid].addPost(data);
+          break;
+        case "pin" :
+          rooms[data.roomid].pinPost(data);
+          notifyUsers(data.roomid, "pin", data, people[socket.id].name);
+          break;
+        case "link" :
+          rooms[data.roomid].pinPost(data);
+          notifyUsers(data.roomid, "link", data, people[socket.id].name)
+          break;
+        }
+      
         utils.sendToAllClientsInRoom(io,  data.roomid, 'roomPosts',
         {
             room : data.roomid,
             posts : rooms[data.roomid].posts,
             pinnedPosts : rooms[data.roomid].pinnedPosts
-        });
-      }
+        });  
+      
   });
 
   socket.on('disconnect', function() {
@@ -223,8 +204,8 @@ function loadFBInfo(user, fbinfo, socket){
 
   socket.on("getClassID", function(fbid, cb){
     userQuery.findByID(fbid, function(err, user){
-      console.log(user);
-      cb(user.rooms)
+      if(user != null)
+        cb(user.rooms)
     });
   });
 

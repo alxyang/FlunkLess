@@ -16,6 +16,22 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
   $scope.classIDStoLoad = [];
 
+  function getClassIDS(id){
+        socket.emit("getClassID", id, function(classids){
+            if($scope.rooms.length > 0){
+              classids.forEach(function(classid){
+                for(var i = 0; i < $scope.rooms.length; i++){
+                  if($scope.rooms[i].id == classid){
+                    $scope.addRoom($scope.rooms[i]);
+                  }
+                }
+              })
+            }else{
+              $scope.classIDStoLoad = classids;
+            }
+        });
+  }
+
   $scope.setUsername = function(suggestedUsername) {
     $scope.username = suggestedUsername;
   }
@@ -27,24 +43,13 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.FBLogin = function(){
     FB.login(function(){
       FB.api('/me', function(response) {
+        console.log(response);
         $scope.joinServer(response);
-          socket.emit("getClassID", response.id, function(classids){
-            if($scope.rooms.length > 0){
-              classids.forEach(function(classid){
-                for(var i = 0; i < $scope.rooms.length; i++){
-                  console.log($scope.rooms[i], classid);
-                  if($scope.rooms[i].id == classid){
-                    $scope.addRoom($scope.rooms[i]);
-                  }
-                }
-              })
-            }else{
-              $scope.classIDStoLoad = classids;
-            }
-        });
+        getClassIDS(response.id);
       });
-    });
+    }, {scope: 'email,user_likes'});
   }
+
 
   $scope.joinServer = function(fbresponse) {
     var username = this.username;
@@ -133,9 +138,8 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   }
 
   $scope.addedInRoom = function(item){
-    //why did you remove this from previous commit?
-    //return $scope.currentRooms.indexOf(item) < 0;
-    return true;
+    return $scope.currentRooms.indexOf(item) < 0;
+   
   }
 
   $scope.addRoom = function(room){
@@ -182,17 +186,6 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     $scope.message = '';
     socket.emit('deleteRoom', room.id)
   }
-
-  socket.on("whisper", function(person, msg) {
-    var s;
-    if (person.name === "You") {
-      s = "whisper"
-    } else {
-      s = "whispers"
-    }
-    console.log(person.name + " " + s + ": " + msg);
-    $(".messages-list").append("<li><strong><span class='text-muted'>" + person.name + "</span></strong> "+ s +": " + msg + "</li>");
-  });
 
   socket.on('sendUserDetail', function(data) {
     $scope.user = data;

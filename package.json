@@ -15,8 +15,9 @@
     "underscore": "~1.5.2",
     "bower": "~1.2.8",
     "nodemon": "*",
-    "fbgraph": "*"
-  },
+    "fbgraph": "*",
+    "nodemailer" : "*"
+      },
   "devDependencies": {},
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install"
