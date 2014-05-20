@@ -113,11 +113,10 @@ function notifyUsers(roomid, type, data, sender){
     socket.on('joinRoom', function(id) {
     if (typeof people[socket.id] !== 'undefined') {
       var roomToJoin = rooms[id];
-      var peopleIn = roomToJoin.getListOfPeople();
       socket.join(roomToJoin.id); // joins actual room
       roomToJoin.addPerson(people[socket.id]); // adds pointer to person from room
       people[socket.id].addRoom(roomToJoin); // adds pointer to room from person
-
+      var peopleIn = roomToJoin.getListOfPeople();
       utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
       utils.sendToSelf(socket, 'roomPosts',
         {
