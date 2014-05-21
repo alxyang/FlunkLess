@@ -21,9 +21,9 @@ Room.prototype.setCategory = function(category){
   this.category = category;
 };
 
-Room.prototype.removePerson = function(personID){
+Room.prototype.removePerson = function(person){
   this.people = this.people.filter(function(e){
-    return e.name != personID;
+    return e.socketid != person.socketid;
   })
 }
 

@@ -167,11 +167,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     $("#classtabs").prepend(roomTab);
   }
 
-  $scope.leaveRoom = function(roomid) {
-    var room = $scope.rooms.filter(function(e){
-      return e.id == roomid;
-    })[0];
-    
+  $scope.leaveRoom = function(room) {
     $scope.message = '';
     if(room != null){
       //console.log("LEAVING ROOM " + roomid);

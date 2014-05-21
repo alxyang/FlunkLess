@@ -122,7 +122,15 @@ function notifyUsers(roomid, type, data, sender){
       roomToJoin.addPerson(people[socket.id]); // adds pointer to person from room
       people[socket.id].addRoom(roomToJoin); // adds pointer to room from person
       var peopleIn = roomToJoin.getListOfPeople();
-      utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
+      if(roomToJoin.pubView == true){
+        utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
+      }else{
+        console.log(roomToJoin);
+        roomToJoin.invitedUsers.forEach(function(person){
+          console.log(person);
+          utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
+        })
+      }
       utils.sendToSelf(socket, 'roomPosts',
         {
             room : id, 
@@ -145,9 +153,15 @@ function notifyUsers(roomid, type, data, sender){
       var roomToJoin = rooms[id];
       socket.leave(roomToJoin.id); // joins actual room
       roomToJoin.removePerson(people[socket.id]); // adds pointer to person from room
-      delete people[socket.id];
+      console.log(roomToJoin);
       var peopleIn = roomToJoin.getListOfPeople();
-      utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn})
+      if(roomToJoin.pubView == true){
+        utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
+      }else{
+        roomToJoin.invitedUsers.forEach(function(person){
+          utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
+        })
+      }
       utils.sendToSelf(socket, 'roomPosts',
         {
             room : id, 
@@ -207,8 +221,9 @@ function notifyUsers(roomid, type, data, sender){
   });
 
   socket.on("inviteToChat", function(person){
-    console.log(people[socket.id], "AND ", person);
     var room = createRoom(socket.id+"-"+person.socketid, false, socket.id);
+    room.invitedUsers.push(person);
+    room.invitedUsers.push(people[socket.id]);
     utils.sendToUser(io, socket.id, "invitedToRoom", room);
     utils.sendToUser(io, person.socketid, "invitedToRoom", room);
 
