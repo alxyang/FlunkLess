@@ -36,13 +36,16 @@ function listAvailableRooms(socket, rooms){
   return newrooms;
 }
 
-function createRoom(data, visibility){
+function createRoom(data, visibility, socketid){
   var roomName = data;
   if (roomName.length !== 0) {
     var uniqueRoomID = uuid.v4(); //guarantees uniquness of room
-    var room = new Room(roomName, uniqueRoomID, socket.id, visibility);
+    var room = new Room(roomName, uniqueRoomID, socketid, visibility);
     rooms[uniqueRoomID] = room;
-   utils.sendToAllConnectedClients(io,'listAvailableChatRooms', listAvailableRooms(socket,rooms));
+    if(visibility == true){
+      utils.sendToAllConnectedClients(io,'listAvailableChatRooms', listAvailableRooms(socket,rooms));
+    }
+    return room;
   }
 }
 
@@ -108,7 +111,7 @@ function notifyUsers(roomid, type, data, sender){
         return exists = true;
       });
       if (!exists) {
-        createRoom(data, false);
+        createRoom(data, true);
       }
     });
 
@@ -201,6 +204,14 @@ function notifyUsers(roomid, type, data, sender){
         delete people[socket.id];
         utils.sendToAllConnectedClients(io,'listAvailableChatRooms', listAvailableRooms(socket,rooms));
       }
+  });
+
+  socket.on("inviteToChat", function(person){
+    console.log(people[socket.id], "AND ", person);
+    var room = createRoom(socket.id+"-"+person.socketid, false, socket.id);
+    utils.sendToUser(io, socket.id, "invitedToRoom", room);
+    utils.sendToUser(io, person.socketid, "invitedToRoom", room);
+
   });
 
   socket.on("getClassID", function(fbid, cb){

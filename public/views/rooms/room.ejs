@@ -1,49 +1,83 @@
-
-<div class="grid" id="{{room.id}}" ng-show='viewPage == room.id' >
-<div class="row" style="height:100%">
-<div class="span8" >
-   <div class="panel">
-      <div class="panel-header  bg-lightBlue fg-white">
-         ChatBox -- {{room.name}}
-      </div>
-      <div class="panel-content">
-            <div id="chat">
-               <div id="messages" style="overflow:scroll; height:250px">
-                  <ul>
-                     <li class="list-unstyled" ng-repeat="message in room.posts" ng-cloak autoscroll ng-class="{dark: $index % 2 === 0}"><strong>{{ message.name }}</strong>: {{ message.message }}</li>
-                  </ul>
-               </div>
-               <br>
-               <form class="input-control textarea">
-                  <textarea class="input-control text size8" ng-model="message" name="message" id="message"on-focus="focus(true)" on-blur="focus(false)" type="text" value="" placeholder="Put message here"></textarea>
-                  <div class="size2 input-control select">
-                     <select ng-model="room.writeMode" ng-options="mode for mode in modes"></select>
-                  </div>
-                  <input type="text" ng-model="urllink" ng-show="room.writeMode == 'Link'"placeholder="Place URL Link here" 
-                        class="size5 input-control text"></input>
-                  <button ng-click="send(room.id, room.writeMode)">Submit</button>
-               </form>
+<div class="grid" id="{{room.id}}" ng-show='viewPage == room.id' style="width:120%">
+    <div class="row" style="height:100%">
+        <div class="span8">
+            <div class="panel">
+                <div class="panel-header  bg-lightBlue fg-white">
+                    {{room.name}}
+                </div>
+                <div class="panel-content">
+                    <div class="tab-control" data-role="tab-control">
+                        <ul class="tabs">
+                            <li class="active"><a href="#general">General Chat</a>
+                            </li>
+                            <li><a href="#lfg">Looking For Group</a>
+                            </li>
+                            <li><a href="#students">Student Group</a>
+                            </li>
+                            <li><a href="#staff">Staff Room</a>
+                            </li>
+                        </ul>
+                        <div class="frames">
+                            <div id="general" class="frame" style="overflow:scroll; height:250px">
+                                <ul>
+                                    <li class="list-unstyled" ng-repeat="message in room.posts" ng-cloak autoscroll ng-class="{dark: $index % 2 === 0}"><strong>{{ message.name }}</strong>: {{ message.message }}</li>
+                                </ul>
+                            </div>
+                            <div id="lfg" class="frame" style="overflow:scroll; height:250px">
+                                <ul>
+                                </ul>
+                            </div>
+                            <div id="students" class="frame" style="overflow:scroll; height:250px">
+                                <ul>
+                                </ul>
+                            </div>
+                            <div id="staff" class="frame" style="overflow:scroll; height:250px">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <form class="input-control textarea">
+                        <textarea class="input-control text size8" ng-model="message" name="message" id="message" on-focus="focus(true)" on-blur="focus(false)" type="text" value="" placeholder="Put message here"></textarea>
+                        <div class="size2 input-control select">
+                            <select ng-model="room.writeMode" ng-options="mode for mode in modes"></select>
+                        </div>
+                        <input type="text" ng-model="urllink" ng-show="room.writeMode == 'Link'" placeholder="Place URL Link here" class="size5 input-control text"></input>
+                        <button ng-click="send(room.id, room.writeMode)">Submit</button>
+                    </form>
+                </div>
             </div>
-         </div>
-      </div>
-   </div>
-   <div class="span4">
-         <div class="panel" >
-      <div class="panel-header  bg-lightBlue fg-white">
-         Pinned Notes
-      </div>
-      <div class="panel-content">
-         <ul ng-repeat="item in room.pinnedPosts">
-            <pin post="item"></pin>
-         </ul>
-      </div>
-   </div>
-   <div class="panel">
-       <div class="panel-header  bg-lightBlue fg-white">People Online</div>
-      <ul ng-repeat="person in room.people">
-         <li>{{person}}</li>
-      </ul>
-      <button ng-click="leaveRoom(room.id)">Leave Room</button>
-   </div>
-</div>
-</div>
+        </div>
+        <div class="span4">
+            <div class="panel">
+                <div class="panel-header  bg-lightBlue fg-white">
+                    Pinned Notes
+                </div>
+                <div class="panel-content">
+                    <ul ng-repeat="item in room.pinnedPosts">
+                        <pin post="item"></pin>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel-header  bg-lightBlue fg-white">People Online</div>
+
+                <div class="listview-outlook small">
+                    <div ng-repeat="person in room.people">
+                        <a href="#" class="list" ng-click="invitePerson(person)">
+                            <div class="list-content">
+                                <img src="http://metroui.org.ua/images/word2013icon.png" class="icon" />
+                                <div class="data">{{person.name}}</div>
+                            </div>
+                        </a>
+                    </div>
+                    <a href="#" class="list">
+                        <div class="list-content">
+                            <div ng-click="leaveRoom(room.id)" class="data">Leave Room</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>

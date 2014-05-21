@@ -28,7 +28,7 @@ Room.prototype.removePerson = function(personID){
 }
 
 Room.prototype.getListOfPeople = function(){
-  return this.people.map(function(e){ return e.name });
+  return this.people;
 }
 
 Room.prototype.addPost = function(post){

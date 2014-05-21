@@ -1399,7 +1399,6 @@ a {
 }
 .metro .grid .row {
   display: block;
-  margin-top: 20px;
 }
 .metro .grid .row:before,
 .metro .grid .row:after {

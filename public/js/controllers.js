@@ -46,7 +46,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.FBLogin = function(){
     FB.login(function(){
       FB.api('/me', function(response) {
-        console.log(response);
+        //console.log(response);
         $scope.joinServer(response);
         getClassIDS(response.id);
       });
@@ -147,6 +147,8 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
   $scope.addRoom = function(room){
     //TODO: need a check here to see if user has already added room!
+    room.writeMode = "Send";
+    room.messageQueue = 0;
     $scope.currentRooms.unshift(room);
     var roomTab = $("<li><a>"+room.name.slice(0,room.name.indexOf("-")) + " </a></li>");
     var exit = $("<div class='badge bg-red'></div>");
@@ -156,14 +158,13 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     roomTab.click(function(){
       $scope.$apply(function(){
         $scope.viewPage = room.id;
-        roomTab.addClass("active");
         room.messageQueue = 0;
          room.displayBadge.text(room.messageQueue);
       });
     });
 
     socket.emit('joinRoom', room.id);
-    $("#classtabs").prepend(roomTab).tabcontrol();
+    $("#classtabs").prepend(roomTab);
   }
 
   $scope.leaveRoom = function(roomid) {
@@ -173,7 +174,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     
     $scope.message = '';
     if(room != null){
-      console.log("LEAVING ROOM " + roomid);
+      //console.log("LEAVING ROOM " + roomid);
       socket.emit('leaveRoom', room.id);
       room.displayTab.remove(); 
       $scope.currentRooms.splice($scope.currentRooms.indexOf(room),1);
@@ -185,9 +186,17 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     }
   }
 
+  $scope.invitePerson = function(person){
+    var invitePerson = confirm("Invite " + person.name + "to a private room?");
+    if(invitePerson){
+      socket.emit("inviteToChat", person);
+    }
+  }
+
   socket.on("invitedToRoom", function(room){
-    if(addedInRoom(room)== false)
-      $scope.addRoom(room);
+    console.log("INVITED TO ", room);
+    $scope.addRoom(room);
+     $scope.viewPage = room.id;
   });
 
   socket.on('sendUserDetail', function(data) {
@@ -231,7 +240,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   });
 
   socket.on('roomData', function(data){
-    console.log(data);
+    //console.log(data);
     angular.forEach($scope.currentRooms, function(room){
       if(data.room.localeCompare(room.id) >= 0){
           room.people = data.people;
@@ -243,13 +252,13 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     angular.forEach($scope.currentRooms, function(room){
       if(data.room === room.id){
           if(room.id != $scope.viewPage){
-            console.log(data.posts, room.posts);
+            //console.log(data.posts, room.posts);
             room.messageQueue += data.posts.length - room.posts.length;
             room.displayBadge.text(room.messageQueue);
           }
           room.posts = data.posts;
           room.pinnedPosts = data.pinnedPosts;
-          console.log(room);
+          //console.log(room);
      }
     });
   });
