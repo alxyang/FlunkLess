@@ -1,7 +1,18 @@
-<div id="createroom">
-    <form class="form-inline" role="form" ng-hide="user.owns && user.inroom">
-            <div class="form-group">
-                <input type="text" placeholder="Enter room name" class="form-control" ng-model="roomname" name="roomname" id="roomname">
-            </div> 
+<div id="createroom" class="grid">
+    <form class="form-inline row" role="form" ng-hide="user.owns && user.inroom">
+
+        <div class="form-group span10">
+            <input type="text" placeholder="Enter room name" class="form-control" ng-model="roomname" name="roomname" id="roomname">
+        </div>
+
+        <div class="button-set span2">
+            <button ng-class="{'active' : !grid}" ng-click="grid=false">
+                <i class="icon-list"></i>
+            </button>
+            <button ng-class="{'active' : grid}" ng-click="grid=true">
+                <i class="icon-grid"></i>
+            </button>
+        </div>
+
     </form>
 </div>

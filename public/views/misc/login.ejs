@@ -5,15 +5,14 @@
 
     <p class="subheader">Welcome to FlunkLess</p>
     <p class="subheader-secondary">
-        Please enter your name below and click Join, or log in with Facebook
+         Please enter your screenname below and log in. This app requires <br> Facebook to access credentials.
     </p>
     <br>
     <form class="form-inline" role="form">
         <div class="form-group">
             <input type="text" class="form-control" name="username" id="username" ng-model="username" placeholder="Enter desired name">
         </div>
-        <button type="submit" class="bg-lightGreen fg-white" ng-click='joinServer()'>Enter chat</button>
-        <button type="submit" class="bg-lightBlue fg-white" ng-click='FBLogin()'>Log in with Facebook</button>
+        <button type="submit" class="bg-lightBlue fg-white" ng-click='FBLogin()'>Log in</button>
         <p ng-show="loading">Loading...</p>
     </form>
 

@@ -2,7 +2,7 @@
 <div class="grid" id="{{room.id}}" ng-show='viewPage == room.id' >
 <div class="row" style="height:100%">
 <div class="span8" >
-   <div class="panel"  data-role="panel">
+   <div class="panel">
       <div class="panel-header  bg-lightBlue fg-white">
          ChatBox -- {{room.name}}
       </div>
@@ -28,7 +28,7 @@
       </div>
    </div>
    <div class="span4">
-         <div class="panel"  data-role="panel">
+         <div class="panel" >
       <div class="panel-header  bg-lightBlue fg-white">
          Pinned Notes
       </div>
@@ -38,12 +38,12 @@
          </ul>
       </div>
    </div>
-   <fieldset>
-      <legend>People Online</legend>
+   <div class="panel">
+       <div class="panel-header  bg-lightBlue fg-white">People Online</div>
       <ul ng-repeat="person in room.people">
          <li>{{person}}</li>
       </ul>
       <button ng-click="leaveRoom(room.id)">Leave Room</button>
-   </fieldset>
+   </div>
 </div>
 </div>

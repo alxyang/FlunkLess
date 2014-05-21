@@ -5864,10 +5864,6 @@ a {
   cursor: default;
   color: #555555;
 }
-.metro .sidebar > ul li.active a {
-  background-color: #9a1616;
-  color: #ffffff;
-}
 .metro .sidebar > ul ul {
   margin: 0;
   padding: 0;
@@ -6187,10 +6183,6 @@ a {
   background-color: #ffffff;
   cursor: default;
   color: #999999;
-}
-.metro .sidebar.light li.active a {
-  background-color: #1ba1e2;
-  color: #ffffff;
 }
 .metro .accordion > .accordion-frame {
   border: 1px #eaeaea solid;
