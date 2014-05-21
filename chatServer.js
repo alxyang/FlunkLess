@@ -67,10 +67,12 @@ function notifyUsers(roomid, type, data, sender){
       if(user.rooms.indexOf(roomid)>= 0){
         var subject = "A " + type + " from " + sender;
         if(type == "pin"){
-          emailUtil.email(user.email, subject, data.message, sender);
+          console.log("emailing a pin")
+        //  emailUtil.email(user.email, subject, data.message, sender);
         }else if(type == "link"){
-           emailUtil.email(user.email, subject, "The message was '"+data.message+"' and the link was " + data.link,
-            sender);
+          console.log("emailing a pin")
+         //  emailUtil.email(user.email, subject, "The message was '"+data.message+"' and the link was " + data.link,
+           // sender);
         }
       }
     });
