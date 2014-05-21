@@ -4,11 +4,11 @@
 
 <nav class="navigation-bar">
     <nav class="navigation-bar-content" ng-hide="user.name == null">
-        <item class="element"><span class="icon-comments-4"> FlunkLess </item>
+        <item class="element" ng-click="navView='chat'"><span class="icon-comments-4"> FlunkLess </item>
         <item class="element-divider"></item>
-        <item class="element"><a class="fg-white">Create Group</a></item>
+        <item class="element" ng-click="navView = 'create'"><a class="fg-white">Create Group</a></item>
         <item class="element-divider"></item>
-        <item class="element"><a class="fg-white">Manage Groups</a></item>
+        <item class="element" ng-click="navView='manage'"><a class="fg-white">Manage Groups</a></item>
         <span class="element-divider place-right"></span>
         <a class="element place-right" href="#"><span><i class="icon-cog"></i></a>
         <a class="element place-right" href="#">

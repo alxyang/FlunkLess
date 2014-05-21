@@ -17,6 +17,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
   $scope.currentRooms = [];
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
+  $scope.modifyRoom = null;
   $scope.classIDStoLoad = [];
 
   function getClassIDS(id){
@@ -55,7 +56,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
 
   $scope.joinServer = function(fbresponse) {
-    var username = this.username;
+    var username = "kandice";
     if (username === 0) {
       $scope.error.join ='Please enter a username';
     } else {
@@ -150,6 +151,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     room.writeMode = "Send";
     room.messageQueue = 0;
     $scope.currentRooms.unshift(room);
+    $scope.modifyRoom = $scope.currentRooms[0];
     var roomTab = $("<li><a>"+room.name.slice(0,room.name.indexOf("-")) + " </a></li>");
     var exit = $("<div class='badge bg-red'></div>");
     room.displayBadge = exit;
@@ -158,13 +160,14 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     roomTab.click(function(){
       $scope.$apply(function(){
         $scope.viewPage = room.id;
+        $scope.modifyRoom = room;
         room.messageQueue = 0;
          room.displayBadge.text(room.messageQueue);
       });
     });
 
     socket.emit('joinRoom', room.id);
-    $("#classtabs").prepend(roomTab);
+    $(".classtabs").prepend(roomTab);
   }
 
   $scope.leaveRoom = function(room) {
@@ -174,7 +177,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
       socket.emit('leaveRoom', room.id);
       room.displayTab.remove(); 
       $scope.currentRooms.splice($scope.currentRooms.indexOf(room),1);
-      if($scope.currentRooms == 0){
+      if($scope.currentRooms.length == 0){
         $scope.viewPage = "addroom";
       }else{
         $scope.viewPage = $scope.currentRooms[$scope.currentRooms.length-1].id;
