@@ -1,6 +1,9 @@
 'use strict';
 
 function ChatAppCtrl($scope, $q, $modal, socket) {
+  $scope.viewOptions = ["chat", "create", "manage"];
+  $scope.navView = $scope.viewOptions[0];
+
   $scope.peopleCount = 0;
   $scope.messages = [];
   $scope.user = {}; //holds information about the current user
@@ -182,10 +185,10 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     }
   }
 
-  $scope.deleteRoom = function(room) {
-    $scope.message = '';
-    socket.emit('deleteRoom', room.id)
-  }
+  socket.on("invitedToRoom", function(room){
+    if(addedInRoom(room)== false)
+      $scope.addRoom(room);
+  });
 
   socket.on('sendUserDetail', function(data) {
     $scope.user = data;

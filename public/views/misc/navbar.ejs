@@ -1,0 +1,17 @@
+<nav class="navigation-bar">
+    <nav class="navigation-bar-content" ng-hide="user.name == null">
+        <item class="element"><span class="icon-comments-4"> FlunkLess </item>
+        <item class="element-divider"></item>
+        <item class="element"><a ng-click="navView='chat'" class="fg-white">Chat</a></item>
+        <item class="element-divider"></item>
+        <item class="element"><a ng-click="navView='create'" class="fg-white">Create Room</a></item>
+        <item class="element-divider"></item>
+        <item class="element"><a ng-click="navView='manage'" class="fg-white">Manage Rooms</a></item>
+        <span class="element-divider place-right"></span>
+            <a class="element place-right" href="#"><span><i class="icon-cog"></i></a>
+            <a class="element place-right" href="#">
+                <span>Hello, {{user.realname == null? user.name : user.realname}}</span>
+            </a>
+    </nav>
+</nav>
+<br>

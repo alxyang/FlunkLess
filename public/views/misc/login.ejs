@@ -1,0 +1,23 @@
+<div style="padding-left: 30px;">
+    <div class="page-header" ng-hide="user.name != null">
+        <h1><i class="icon-comments-4"></i>FlunkLess<small> A collaborative workspace</small></h1>
+    </div>
+
+    <p class="subheader">Welcome to FlunkLess</p>
+    <p class="subheader-secondary">
+        Please enter your name below and click Join, or log in with Facebook
+    </p>
+    <br>
+    <form class="form-inline" role="form">
+        <div class="form-group">
+            <input type="text" class="form-control" name="username" id="username" ng-model="username" placeholder="Enter desired name">
+        </div>
+        <button type="submit" class="bg-lightGreen fg-white" ng-click='joinServer()'>Enter chat</button>
+        <button type="submit" class="bg-lightBlue fg-white" ng-click='FBLogin()'>Log in with Facebook</button>
+        <p ng-show="loading">Loading...</p>
+    </form>
+
+
+    <small ng-cloak ng-if="error" class="text-danger">{{ error.join }}</small>  <small ng-cloak ng-if="suggestedUsername" class="text-info" ng-click="setUsername(suggestedUsername)">How about <span class="text-success" style="cursor: pointer;">{{ suggestedUsername }}</a>?</small>
+
+</div>
