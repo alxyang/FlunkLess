@@ -56,7 +56,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
 
   $scope.joinServer = function(fbresponse) {
-    var username = "kandice";
+    var username = this.username;
     if (username === 0) {
       $scope.error.join ='Please enter a username';
     } else {
