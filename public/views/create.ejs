@@ -3,10 +3,11 @@
         <ul>
             <li class="title">Your Rooms</li>
         </ul>
-        <ul>
-        	<li>Group 11 FlunkLess</li>
-        	<li>Awesome Study Group</li>
-        	<li>Too Cool for Nadir</li>
+        <ul ng-repeat="room in currentRooms | filter: checkPrivacy">
+        	<li><a ng-click="changeModifiedRoom(room)">{{room.name}}</a></li>
+        </ul>
+		 <ul>
+            <li><a>Create Room</a></li>
         </ul>
     </nav>
 	<div class="span9">
@@ -14,25 +15,24 @@
 		<legend>Create a room</legend>
 		<label>Name</label>
 		<div class="input-control text">
-		    <input type="text" value="" placeholder="input text"/>
+		    <input type="text" ng-model="modifyRoom.name" placeholder="input text"/>
 		    <button class="btn-clear"></button>
 		</div>
 		<label>Description</label>
 		<div class="input-control textarea">
-		    <textarea>...</textarea>
+		    <textarea  ng-model="modifyRoom.description" ></textarea>
 		</div>
 		<label>Invite Users</label>
 		Users you've invited will be sent a request to join your room. They can accept or decline.
 		<div class="input-control text">
          <div angucomplete id="ex1" placeholder="Search people" pause="100" selectedobject="selectedPerson" localdata="users" searchfields="name" titlefield="name" minlength="1" inputclass="form-control form-control-small"></div>
+         <button ng-click="addToInvitedUsers()"> Add </button>
 		<label>Invited users</label>
-		<div class="input-control textarea">
-		    <textarea>thomas
-	alex
-	kandice</textarea>
-		</div>
+		<ul ng-repeat="person in modifyRoom.invitedUsers">
+			<li>{{person.name}} ({{person.realname}})</li>
+		</ul>
 		
-		<input type="submit" value="Submit">
+		<input type="submit" value="Submit" ng-click="submitRoom(modifyRoom)">
 
 		
 	</div>

@@ -19,7 +19,14 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
   $scope.classIDStoLoad = [];
 
+  var emptyRoom = {
+    name : "Place Room Name Here",
+    description : "Place Description Here",
+    invitedUsers : [],
+    status : "New"
+  }
 
+  $scope.modifyRoom = emptyRoom;
 
   function getClassIDS(id){
         socket.emit("getClassID", id, function(classids){
@@ -35,6 +42,10 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
               $scope.classIDStoLoad = classids;
             }
         });
+  }
+
+  $scope.changeModifiedRoom = function(room){
+    $scope.modifyRoom = room;
   }
 
   $scope.setUsername = function(suggestedUsername) {
@@ -113,30 +124,32 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
           message : this.message,
           type : 'pin'
         });
-      }else{
-        alert("I DONT KNOW ABOUT THIS ONE");
       }
+      this.message = "";
     }
 
   }
 
-  $scope.createRoom = function() {
+  $scope.submitRoom = function(room){
+    console.log(room);
+    if(room.status == "New"){
+      $scope.createRoom(room);
+    }else{
+
+    }
+  }
+
+  $scope.createRoom = function(room) {
     var roomExists = false;
-    var room = this.roomname;
-    if (typeof room === 'undefined' || (typeof room === 'string' && room.length === 0)) {
+    if ((typeof room.name === 'string' && room.name.length === 0)) {
       $scope.error.create = 'Please enter a room name';
     } else {
-      socket.emit('checkUniqueRoomName', room, function(data) {
+      socket.emit('checkUniqueRoomName', room.name, function(data) {
         roomExists = data.result;
         if (roomExists) {
           $scope.error.create = 'Room ' + room + ' already exists.';
         } else {
           socket.emit('createRoom', room);
-          $scope.error.create = '';
-          if (!$scope.user.inroom) {
-            $scope.messages = [];
-            $scope.roomname = '';
-          }
         }
       });
     }
@@ -144,7 +157,16 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
   $scope.addedInRoom = function(item){
     return $scope.currentRooms.indexOf(item) < 0;
-   
+  }
+
+  $scope.checkPrivacy = function(item){
+    return item.visibility == false;
+  }
+
+  $scope.addToInvitedUsers = function(){
+    var invitee = $scope.selectedPerson.originalObject;
+    if($scope.modifyRoom.invitedUsers.indexOf(invitee) < 0)
+      $scope.modifyRoom.invitedUsers.push(invitee)
   }
 
   $scope.addRoom = function(room){
@@ -154,7 +176,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     $scope.currentRooms.unshift(room);
     var index = room.name.indexOf("-");
     if(index < 5){
-      index = 8;
+      index = 12;
     }
     var roomTab = $("<li><a>"+room.name.slice(0, index) + " </a></li>");
     var exit = $("<div class='badge bg-red'></div>");
@@ -206,6 +228,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   });
 
   socket.on('listAvailableChatRooms', function(data) {
+    console.log(data);
     angular.forEach(data, function(room, key) {
       room.writeMode = "Send";
       room.messageQueue = 0;
