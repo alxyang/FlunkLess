@@ -238,7 +238,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
       angular.forEach(room.people, function(e){
         var index = -1;
         for(var i = 0; i < $scope.users.length; i++){
-          if($scope.users[i].id == e.id){
+          if($scope.users[i].socketid == e.socketid){
             index = i;
           }
         }
@@ -285,7 +285,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
           angular.forEach(room.people, function(e){
             var index = -1;
             for(var i = 0; i < $scope.users.length; i++){
-              if($scope.users[i].id == e.id){
+              if($scope.users[i].socketid == e.socketid){
                 index = i;
               }
             }

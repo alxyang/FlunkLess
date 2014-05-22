@@ -113,8 +113,9 @@ function notifyUsers(roomid, type, data, sender){
       if (!exists) {
         var newroom = createRoom(room.name, false, socket.id);
         newroom.invitedUsers = room.invitedUsers;
-        console.log(rooms[newroom.id]);
-        console.log(Object.keys(rooms).length);
+        if(newroom.invitedUsers.indexOf(people[socket.id])< 0){
+          newroom.invitedUsers.push(people[socket.id]);
+        }
         newroom.invitedUsers.forEach(function(person){
           utils.sendToUser(io, person.socketid, 'listAvailableChatRooms', listAvailableRooms(person,rooms));
           utils.sendToUser(io, person.socketid, "invitedToRoom", newroom);
