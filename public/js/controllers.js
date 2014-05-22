@@ -168,7 +168,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     });
 
     socket.emit('joinRoom', room.id);
-    $("#classtabs").prepend(roomTab);
+    $(".classtabs").prepend(roomTab);
   }
 
   $scope.leaveRoom = function(room) {
@@ -178,7 +178,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
       socket.emit('leaveRoom', room.id);
       room.displayTab.remove(); 
       $scope.currentRooms.splice($scope.currentRooms.indexOf(room),1);
-      if($scope.currentRooms == 0){
+      if($scope.currentRooms.length == 0){
         $scope.viewPage = "addroom";
       }else{
         $scope.viewPage = $scope.currentRooms[$scope.currentRooms.length-1].id;
