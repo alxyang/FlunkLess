@@ -143,7 +143,6 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
   $scope.addedInRoom = function(item){
     return $scope.currentRooms.indexOf(item) < 0;
-   
   }
 
   $scope.addRoom = function(room){
