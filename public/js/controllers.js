@@ -17,7 +17,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
   $scope.currentRooms = [];
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
-  $scope.classIDStoLoad = [];
+  $scope.roomsToLoad = [];
 
   var emptyRoom = {
     name : "Place Room Name Here",
@@ -39,7 +39,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
                 }
               })
             }else{
-              $scope.classIDStoLoad = classids;
+              $scope.roomsToLoad = classids;
             }
         });
   }
@@ -218,9 +218,11 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   }
 
   socket.on("invitedToRoom", function(room){
-    console.log("INVITED TO ", room);
-    $scope.addRoom(room);
-     $scope.viewPage = room.id;
+    var check = confirm("You have been invited to " + room.name + ". Do you wish to accept?");
+    if(confirm){
+       $scope.addRoom(room);
+       $scope.viewPage = room.id;
+    }
   });
 
   socket.on('sendUserDetail', function(data) {
@@ -252,8 +254,8 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     $scope.rooms = $scope.rooms.sort(function(e1,e2){
       return e1.name.localeCompare(e2.name);
     });
-    if($scope.classIDStoLoad.length > 0){
-      var classids = $scope.classIDStoLoad;
+    if($scope.roomsToLoad.length > 0){
+      var classids = $scope.roomsToLoad;
       classids.forEach(function(classid){
       for(var i = 0; i < $scope.rooms.length; i++){
         if($scope.rooms[i].id == classid){
@@ -261,7 +263,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
           }
         } 
       })
-        $scope.classIDStoLoad = [];
+        $scope.roomsToLoad = [];
     }
   });
 

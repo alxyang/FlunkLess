@@ -117,7 +117,7 @@ function notifyUsers(roomid, type, data, sender){
         console.log(Object.keys(rooms).length);
         newroom.invitedUsers.forEach(function(person){
           utils.sendToUser(io, person.socketid, 'listAvailableChatRooms', listAvailableRooms(person,rooms));
-          utils.sendToUser(io, socket.id, "invitedToRoom", newroom);
+          utils.sendToUser(io, person.socketid, "invitedToRoom", newroom);
         })
       }
     });
