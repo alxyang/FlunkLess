@@ -150,7 +150,11 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     room.writeMode = "Send";
     room.messageQueue = 0;
     $scope.currentRooms.unshift(room);
-    var roomTab = $("<li><a>"+room.name.slice(0,room.name.indexOf("-")) + " </a></li>");
+    var index = room.name.indexOf("-");
+    if(index < 5){
+      index = 8;
+    }
+    var roomTab = $("<li><a>"+room.name.slice(0, index) + " </a></li>");
     var exit = $("<div class='badge bg-red'></div>");
     room.displayBadge = exit;
     room.displayTab = roomTab;
