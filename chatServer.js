@@ -212,7 +212,7 @@ function notifyUsers(roomid, type, data, sender){
     if(people[socket.id] != null){
         var user = people[socket.id];
         user.rooms.forEach(function(e){
-          rooms[e].removePerson(user.name);
+          rooms[e].removePerson(user);
           utils.sendToAllConnectedClients(io, 'roomData', {room : rooms[e].id + "", people : rooms[e].getListOfPeople()});
         }); 
         delete people[socket.id];

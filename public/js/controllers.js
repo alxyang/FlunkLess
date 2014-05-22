@@ -4,10 +4,10 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.viewOptions = ["chat", "create", "manage"];
   $scope.navView = $scope.viewOptions[0];
 
-  $scope.peopleCount = 0;
+  $scope.usersCount = 0;
   $scope.messages = [];
   $scope.user = {}; //holds information about the current user
-  $scope.users = {}; //holds information about ALL users
+  $scope.users = []; //holds information about ALL users
   $scope.rooms = []; //holds information about all rooms
   $scope.error = {};
 
@@ -18,6 +18,8 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.currentRooms = [];
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
   $scope.classIDStoLoad = [];
+
+
 
   function getClassIDS(id){
         socket.emit("getClassID", id, function(classids){
@@ -208,6 +210,17 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
       room.writeMode = "Send";
       room.messageQueue = 0;
       $scope.rooms.push(room);
+      angular.forEach(room.people, function(e){
+        var index = -1;
+        for(var i = 0; i < $scope.users.length; i++){
+          if($scope.users[i].id == e.id){
+            index = i;
+          }
+        }
+        if(index == -1){
+          $scope.users.push(e);
+        }
+      })
       if($scope.categories.indexOf(room.category) < 0){
         $scope.categories.push(room.category);
       }
@@ -244,6 +257,17 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     angular.forEach($scope.currentRooms, function(room){
       if(data.room.localeCompare(room.id) >= 0){
           room.people = data.people;
+          angular.forEach(room.people, function(e){
+            var index = -1;
+            for(var i = 0; i < $scope.users.length; i++){
+              if($scope.users[i].id == e.id){
+                index = i;
+              }
+            }
+            if(index == -1){
+              $scope.users.push(e);
+              }
+          })
      }
     });
   })

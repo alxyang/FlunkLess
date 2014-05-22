@@ -7,9 +7,6 @@ function Room(name, id, owner, visibility) {
   this.invitedUsers = [];
   this.people = [];
   this.pinnedPosts = [];
-  if(owner != null){
-    this.invitedUsers.push(owner);
-  }
   this.category = null;
 };
 
