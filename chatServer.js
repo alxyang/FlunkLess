@@ -29,7 +29,7 @@ module.exports = function(server) {
 function listAvailableRooms(socket, rooms){
   var newrooms = {};
   for(var i in rooms){
-    if(rooms[i].pubView || rooms[i].invitedUsers.indexOf(socket.id)>= 0){
+    if(rooms[i].visibility || rooms[i].invitedUsers.indexOf(socket)>= 0){
       newrooms[i] = rooms[i];
     }
   }
@@ -104,14 +104,22 @@ function notifyUsers(roomid, type, data, sender){
       }
     });
 
-    socket.on('createRoom', function(data) {
+    socket.on('createRoom', function(room) {
       var exists = false;
       _.find(rooms, function(k, v) {
-        if (k.name.toLowerCase() === data.toLowerCase())
+        if (k.name.toLowerCase() === room.name.toLowerCase())
         return exists = true;
       });
       if (!exists) {
-        createRoom(data, true);
+        var newroom = createRoom(room.name, false, socket.id);
+        newroom.invitedUsers = room.invitedUsers;
+        if(newroom.invitedUsers.indexOf(people[socket.id])< 0){
+          newroom.invitedUsers.push(people[socket.id]);
+        }
+        newroom.invitedUsers.forEach(function(person){
+          utils.sendToUser(io, person.socketid, 'listAvailableChatRooms', listAvailableRooms(person,rooms));
+          utils.sendToUser(io, person.socketid, "invitedToRoom", newroom);
+        })
       }
     });
 
@@ -122,12 +130,10 @@ function notifyUsers(roomid, type, data, sender){
       roomToJoin.addPerson(people[socket.id]); // adds pointer to person from room
       people[socket.id].addRoom(roomToJoin); // adds pointer to room from person
       var peopleIn = roomToJoin.getListOfPeople();
-      if(roomToJoin.pubView == true){
+      if(roomToJoin.visibility == true){
         utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
-      }else{
-        console.log(roomToJoin);
+      }else{ 
         roomToJoin.invitedUsers.forEach(function(person){
-          console.log(person);
           utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
         })
       }
@@ -155,7 +161,7 @@ function notifyUsers(roomid, type, data, sender){
       roomToJoin.removePerson(people[socket.id]); // adds pointer to person from room
       console.log(roomToJoin);
       var peopleIn = roomToJoin.getListOfPeople();
-      if(roomToJoin.pubView == true){
+      if(roomToJoin.visibility == true){
         utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
       }else{
         roomToJoin.invitedUsers.forEach(function(person){
@@ -212,7 +218,7 @@ function notifyUsers(roomid, type, data, sender){
     if(people[socket.id] != null){
         var user = people[socket.id];
         user.rooms.forEach(function(e){
-          rooms[e].removePerson(user.name);
+          rooms[e].removePerson(user);
           utils.sendToAllConnectedClients(io, 'roomData', {room : rooms[e].id + "", people : rooms[e].getListOfPeople()});
         }); 
         delete people[socket.id];

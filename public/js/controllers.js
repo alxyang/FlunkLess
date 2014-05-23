@@ -4,10 +4,10 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.viewOptions = ["chat", "create", "manage"];
   $scope.navView = $scope.viewOptions[0];
 
-  $scope.peopleCount = 0;
+  $scope.usersCount = 0;
   $scope.messages = [];
   $scope.user = {}; //holds information about the current user
-  $scope.users = {}; //holds information about ALL users
+  $scope.users = []; //holds information about ALL users
   $scope.rooms = []; //holds information about all rooms
   $scope.error = {};
 
@@ -17,8 +17,16 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
 
   $scope.currentRooms = [];
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
-  $scope.modifyRoom = null;
-  $scope.classIDStoLoad = [];
+  $scope.roomsToLoad = [];
+
+  var emptyRoom = {
+    name : "Place Room Name Here",
+    description : "Place Description Here",
+    invitedUsers : [],
+    status : "New"
+  }
+
+  $scope.modifyRoom = emptyRoom;
 
   function getClassIDS(id){
         socket.emit("getClassID", id, function(classids){
@@ -31,9 +39,13 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
                 }
               })
             }else{
-              $scope.classIDStoLoad = classids;
+              $scope.roomsToLoad = classids;
             }
         });
+  }
+
+  $scope.changeModifiedRoom = function(room){
+    $scope.modifyRoom = room;
   }
 
   $scope.setUsername = function(suggestedUsername) {
@@ -112,30 +124,32 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
           message : this.message,
           type : 'pin'
         });
-      }else{
-        alert("I DONT KNOW ABOUT THIS ONE");
       }
+      this.message = "";
     }
 
   }
 
-  $scope.createRoom = function() {
+  $scope.submitRoom = function(room){
+    console.log(room);
+    if(room.status == "New"){
+      $scope.createRoom(room);
+    }else{
+
+    }
+  }
+
+  $scope.createRoom = function(room) {
     var roomExists = false;
-    var room = this.roomname;
-    if (typeof room === 'undefined' || (typeof room === 'string' && room.length === 0)) {
+    if ((typeof room.name === 'string' && room.name.length === 0)) {
       $scope.error.create = 'Please enter a room name';
     } else {
-      socket.emit('checkUniqueRoomName', room, function(data) {
+      socket.emit('checkUniqueRoomName', room.name, function(data) {
         roomExists = data.result;
         if (roomExists) {
           $scope.error.create = 'Room ' + room + ' already exists.';
         } else {
           socket.emit('createRoom', room);
-          $scope.error.create = '';
-          if (!$scope.user.inroom) {
-            $scope.messages = [];
-            $scope.roomname = '';
-          }
         }
       });
     }
@@ -145,13 +159,26 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     return $scope.currentRooms.indexOf(item) < 0;
   }
 
+  $scope.checkPrivacy = function(item){
+    return item.visibility == false;
+  }
+
+  $scope.addToInvitedUsers = function(){
+    var invitee = $scope.selectedPerson.originalObject;
+    if($scope.modifyRoom.invitedUsers.indexOf(invitee) < 0)
+      $scope.modifyRoom.invitedUsers.push(invitee)
+  }
+
   $scope.addRoom = function(room){
     //TODO: need a check here to see if user has already added room!
     room.writeMode = "Send";
     room.messageQueue = 0;
     $scope.currentRooms.unshift(room);
-    $scope.modifyRoom = $scope.currentRooms[0];
-    var roomTab = $("<li><a>"+room.name.slice(0,room.name.indexOf("-")) + " </a></li>");
+    var index = room.name.indexOf("-");
+    if(index < 5){
+      index = 12;
+    }
+    var roomTab = $("<li><a>"+room.name.slice(0, index) + " </a></li>");
     var exit = $("<div class='badge bg-red'></div>");
     room.displayBadge = exit;
     room.displayTab = roomTab;
@@ -159,7 +186,6 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     roomTab.click(function(){
       $scope.$apply(function(){
         $scope.viewPage = room.id;
-        $scope.modifyRoom = room;
         room.messageQueue = 0;
          room.displayBadge.text(room.messageQueue);
       });
@@ -192,9 +218,11 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   }
 
   socket.on("invitedToRoom", function(room){
-    console.log("INVITED TO ", room);
-    $scope.addRoom(room);
-     $scope.viewPage = room.id;
+    var check = confirm("You have been invited to " + room.name + ". Do you wish to accept?");
+    if(confirm){
+       $scope.addRoom(room);
+       $scope.viewPage = room.id;
+    }
   });
 
   socket.on('sendUserDetail', function(data) {
@@ -202,10 +230,22 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   });
 
   socket.on('listAvailableChatRooms', function(data) {
+    console.log(data);
     angular.forEach(data, function(room, key) {
       room.writeMode = "Send";
       room.messageQueue = 0;
       $scope.rooms.push(room);
+      angular.forEach(room.people, function(e){
+        var index = -1;
+        for(var i = 0; i < $scope.users.length; i++){
+          if($scope.users[i].socketid == e.socketid){
+            index = i;
+          }
+        }
+        if(index == -1){
+          $scope.users.push(e);
+        }
+      })
       if($scope.categories.indexOf(room.category) < 0){
         $scope.categories.push(room.category);
       }
@@ -214,8 +254,8 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     $scope.rooms = $scope.rooms.sort(function(e1,e2){
       return e1.name.localeCompare(e2.name);
     });
-    if($scope.classIDStoLoad.length > 0){
-      var classids = $scope.classIDStoLoad;
+    if($scope.roomsToLoad.length > 0){
+      var classids = $scope.roomsToLoad;
       classids.forEach(function(classid){
       for(var i = 0; i < $scope.rooms.length; i++){
         if($scope.rooms[i].id == classid){
@@ -223,7 +263,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
           }
         } 
       })
-        $scope.classIDStoLoad = [];
+        $scope.roomsToLoad = [];
     }
   });
 
@@ -242,6 +282,17 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     angular.forEach($scope.currentRooms, function(room){
       if(data.room.localeCompare(room.id) >= 0){
           room.people = data.people;
+          angular.forEach(room.people, function(e){
+            var index = -1;
+            for(var i = 0; i < $scope.users.length; i++){
+              if($scope.users[i].socketid == e.socketid){
+                index = i;
+              }
+            }
+            if(index == -1){
+              $scope.users.push(e);
+              }
+          })
      }
     });
   })

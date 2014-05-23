@@ -3,13 +3,10 @@ function Room(name, id, owner, visibility) {
   this.id = id;
   this.owner = owner;
   this.posts = [];
-  this.pubView = visibility == null ? true : visibility;
+  this.visibility = visibility == null ? true : visibility;
   this.invitedUsers = [];
   this.people = [];
   this.pinnedPosts = [];
-  if(owner != null){
-    this.invitedUsers.push(owner);
-  }
   this.category = null;
 };
 
