@@ -7,9 +7,17 @@ var express = require('express')
   app.use(express.cookieParser() );
   app.use(express.session({ secret: 'nyan cat'}));
 
+  //connect to mongodb
   var mongoose = require('mongoose');
-  mongoose.connect('mongodb://cs121:cs121@oceanic.mongohq.com:10050/FlunkLess');
-  var db = mongoose.connection;
+  //var MONGOHQ_URL="mongodb://user:pass@server.mongohq.com:port_name/db_name"
+  mongoose.connect('mongodb://cs121:cs121@oceanic.mongohq.com:10050/FlunkLess', function(err){
+    if(err){
+      console.log(err);
+    }else{
+      console.log('Connected to Mongodb.');
+    }
+  });
+  // var db = mongoose.connection;
 
   app.set('port', process.env.PORT || 3000);
   app.use(express.bodyParser());

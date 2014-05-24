@@ -13,7 +13,7 @@ var Class = mongoose.model("Class", ClassSchema, 'Class');
 
 ClassModel = function(){};
 
-//Find all Classs
+//Find all Classes
 ClassModel.prototype.findAll = function(callback) {
   Class.find({}, function (err, Class) {
     callback( null, Class )
