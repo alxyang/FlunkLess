@@ -10,7 +10,8 @@ module.exports = function(server) {
   , io = require('socket.io').listen(server)
   , utils = require('./utils/utils')
   , purgatory = require('./utils/purge')
-  , emailUtil = require("./utils/email");
+  , emailUtil = require("./utils/email")
+  , anonRoomNo = 0;
   io.set('log level', 1);
 
   var ClassModel = require("./models/Class").ClassModel;
@@ -227,11 +228,13 @@ function notifyUsers(roomid, type, data, sender){
   });
 
   socket.on("inviteToChat", function(person){
-    var room = createRoom(socket.id+"-"+person.socketid, false, socket.id);
-    room.invitedUsers.push(person);
-    room.invitedUsers.push(people[socket.id]);
-    utils.sendToUser(io, socket.id, "invitedToRoom", room);
-    utils.sendToUser(io, person.socketid, "invitedToRoom", room);
+    if(socket.id != person.socketid){
+      var room = createRoom("room " + anonRoomNo++, false, socket.id);
+      room.invitedUsers.push(person);
+      room.invitedUsers.push(people[socket.id]);
+      utils.sendToUser(io, socket.id, "invitedToRoom", room);
+      utils.sendToUser(io, person.socketid, "invitedToRoom", room);
+    }
 
   });
 
