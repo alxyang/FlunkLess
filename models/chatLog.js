@@ -11,7 +11,7 @@
         message: String,
         created: {type: Date, default: Date.now}
       }]
-  // });
+   });
 
   var chatLog = mongoose.model('chatLog', chatLogSchema);
 
