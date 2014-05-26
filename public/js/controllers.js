@@ -1,6 +1,7 @@
 'use strict';
 
-function ChatAppCtrl($scope, $q, $modal, socket) {
+function ChatAppCtrl($scope, $q, $modal, $http, socket) {
+
   $scope.viewOptions = ["chat", "create", "manage", "chatLog"];
   $scope.navView = $scope.viewOptions[0];
 
@@ -10,6 +11,7 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
   $scope.users = []; //holds information about ALL users
   $scope.rooms = []; //holds information about all rooms
   $scope.error = {};
+  $scope.logs = [];
 
   $scope.modes = ["Send", "Link", "Pin", "To Professor"];
   $scope.categories = [];
@@ -215,6 +217,15 @@ function ChatAppCtrl($scope, $q, $modal, socket) {
     if(invitePerson){
       socket.emit("inviteToChat", person);
     }
+  }
+
+  //currently does not work if room name has slashes, the special chars need to be escaped
+  //makes a get request using $http service to a url using roomname as key
+  $scope.getChatLog = function(roomName){
+    $http.get('/chatLogs/' + roomName).success(function(data){
+      //set array of messages recieved from backend into an array to be displayed on page
+      $scope.logs = data;
+    });
   }
 
   socket.on("invitedToRoom", function(room){
