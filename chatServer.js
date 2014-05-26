@@ -18,6 +18,7 @@ module.exports = function(server) {
   var UserModel = require("./models/User").UserModel;
   var classQuery = new ClassModel();
   var userQuery = new UserModel();
+  var chatLog = require("./models/chatLog");
 
   classQuery.findAll(function(err,classes){
     classes.forEach(function(elm){
@@ -25,7 +26,6 @@ module.exports = function(server) {
       rooms[elm.id].setCategory(elm.group);
     });
   });
-
 
 function listAvailableRooms(socket, rooms){
   var newrooms = {};
@@ -195,6 +195,9 @@ function notifyUsers(roomid, type, data, sender){
       switch(data.type){
         case "message" :  
           rooms[data.roomid].addPost(data);
+          console.log(data.name + "sends: " + data.message);
+          console.log("room name is: " + rooms[data.roomid].name);
+          chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           break;
         case "pin" :
           rooms[data.roomid].pinPost(data);

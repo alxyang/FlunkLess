@@ -1,7 +1,7 @@
 'use strict';
 
 function ChatAppCtrl($scope, $q, $modal, socket) {
-  $scope.viewOptions = ["chat", "create", "manage"];
+  $scope.viewOptions = ["chat", "create", "manage", "chatLog"];
   $scope.navView = $scope.viewOptions[0];
 
   $scope.usersCount = 0;
