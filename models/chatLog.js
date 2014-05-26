@@ -11,7 +11,7 @@
         message: String,
         created: {type: Date, default: Date.now}
       }]
-  });
+   });
 
   var chatLog = mongoose.model('chatLog', chatLogSchema);
 
@@ -23,7 +23,7 @@
     var chatLogCreate = new chatLog({room: roomName , roomMsgs:[{ sender: "ChatBot", message: "No Messages Yet." }]});
     chatLogCreate.save(function(err, chatLogCreate){
     if(err) return console.error(err);
-       console.log(chatLogCreate + " saved");
+       // console.log(chatLogCreate + " saved");
     });
   }
 
@@ -38,7 +38,7 @@
 
     chatLog.update({ 'room': roomName },
          {$push: { 'roomMsgs' : saveMessage }},{upsert:true}, function(err, data) { 
-            console.log("message recieved and saved to db");
+            // console.log("message recieved and saved to db");
     });
   }
 

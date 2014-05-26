@@ -1,12 +1,7 @@
-<div class="row" style="margin-left:20px;">
-    <nav class="sidebar light span3">
-        <ul>
-            <li class="title">Your Rooms</li>
-        </ul>
-        <ul class="classtabs">
-            <li ng-class="{'active' : viewPage == 'addroom'}" ng-click='viewPage = "addroom"'>
-                <a>Manage Rooms</a>
-            </li>
-        </ul>
-    </nav>
-</div>
+
+<h3>{{room.name}} Chat Log</h3>
+<ul ng-repeat="log in logs">
+    <li>{{log.created | date:'MM/dd/yyyy @ h:mma'}} <strong>{{log.sender}}:</strong> {{log.message}}</li>
+</ul>
+
+
