@@ -20,3 +20,14 @@ FlunkLess is a real-time chat application which aims to solve these problems.
   <li>Bootstrap</li>
   <li>Heroku</li>
 </ul>
+
+## Todo:
+<ul>
+  <li>how are pinned posts removed?</li>
+  <li>refactor routing into ng-view and angular router on front-end</li>
+  <li>redesign UI</li>
+  <li>log in admin deletion</li>
+  <li>global settings to turn off email</li>
+  <li>remove subrooms</li>
+  <li>add datepicker functionality to chat logs</li>
+</ul>

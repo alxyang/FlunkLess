@@ -100,4 +100,3 @@ app.factory('geolocation', ['$q','$rootScope','$window', '$http', 'geolocation_m
     }
   };
 }]);
-

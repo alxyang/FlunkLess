@@ -1,6 +1,6 @@
 'use strict';
 
-function ChatAppCtrl($scope, $q, $modal, $http, socket) {
+function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
 
   $scope.viewOptions = ["chat", "create", "manage", "chatLog"];
   $scope.navView = $scope.viewOptions[0];
@@ -228,6 +228,15 @@ function ChatAppCtrl($scope, $q, $modal, $http, socket) {
     });
   }
 
+  //check and compare log dates for date picker
+  $scope.checkStatus = function(log, dt, dt2){
+    //javascript filter piped to the correct output style
+    var filterLogDate = $filter('date')(log.created, 'MM/dd/yyyy');
+    var filterDatepickerDateStart = $filter('date')(dt, 'MM/dd/yyyy');
+    var filterDatepickerDateEnd = $filter('date')(dt2, 'MM/dd/yyyy');
+    return ((filterLogDate >= filterDatepickerDateStart) && (filterLogDate <= filterDatepickerDateEnd));
+  }
+
   socket.on("invitedToRoom", function(room){
     var check = confirm("You have been invited to " + room.name + ". Do you wish to accept?");
     if(confirm){
@@ -325,3 +334,42 @@ function ChatAppCtrl($scope, $q, $modal, $http, socket) {
 
 }
 
+var DatepickerCtrl = function ($scope) {
+  $scope.today = function() {
+    $scope.dt = new Date();
+    $scope.dt2 = new Date();
+  };
+  $scope.today();
+
+  $scope.clear = function () {
+    $scope.dt = null;
+    $scope.dt2 = null;
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = $scope.minDate ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.opened = true;
+  };
+
+  $scope.open2 = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.opened2 = true;
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yy',
+    startingDay: 1
+  };
+
+  $scope.initDate = new Date('2016-15-20');
+  $scope.formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.format = $scope.formats[0];
+
+};
