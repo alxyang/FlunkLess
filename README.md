@@ -29,5 +29,5 @@ FlunkLess is a real-time chat application which aims to solve these problems.
   <li>log in admin deletion</li>
   <li>global settings to turn off email</li>
   <li>remove subrooms</li>
-  <li>add datepicker functionality to chat logs</li>
+  <li>chat history</li>
 </ul>
