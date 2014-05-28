@@ -49,7 +49,8 @@
                     <div ng-repeat="person in room.people">
                         <a href="#" class="list" ng-click="invitePerson(person)">
                             <div class="list-content">
-                                <img src="http://metroui.org.ua/images/word2013icon.png" class="icon" />
+                                <img style="width:60px; height:60px;"
+                                ng-src="http://www.catster.com/files/20121018-catster-pusheen-costume-{{$index+1}}.jpg" class="icon" />
                                 <div class="data">{{person.name}}</div>
                             </div>
                         </a>
