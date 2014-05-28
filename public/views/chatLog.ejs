@@ -1,7 +1,37 @@
-
+<a href="" ng-click="navView='chat';">Return to Room</a>
 <h3>{{room.name}} Chat Log</h3>
+<div ng-controller="DatepickerCtrl">
+    <h4>Date Filter</h4>
+<!--     <pre>Selected date start is: <em>{{dt | date:'MM/dd/yyyy @ h:mma' }}</em></pre>
+    <pre>Selected date end is: <em>{{dt2 | date:'MM/dd/yyyy @ h:mma' }}</em></pre> -->
+    <div class="row">
+        <div class="col-md-6">
+          Start Date:
+            <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+        </div>
+        <div class="col-md-6">
+          Stop Date:
+            <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt2" is-open="opened2" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+        </div>
+    </div>
+<!--     <div class="row">
+        <div class="col-md-6">
+            <label>Format:</label> <select class="form-control" ng-model="format" ng-options="f for f in formats"><option></option></select>
+        </div>
+    </div> -->
 <ul ng-repeat="log in logs">
-    <li>{{log.created | date:'MM/dd/yyyy @ h:mma'}} <strong>{{log.sender}}:</strong> {{log.message}}</li>
+    <li ng-if="checkStatus(log, dt, dt2);">{{log.created | date:'MM/dd/yyyy @ h:mma'}} <strong>{{log.sender}}:</strong> {{log.message}}</li>
 </ul>
+</div>
 
 

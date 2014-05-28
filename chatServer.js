@@ -195,17 +195,20 @@ function notifyUsers(roomid, type, data, sender){
       switch(data.type){
         case "message" :  
           rooms[data.roomid].addPost(data);
-          console.log(data.name + "sends: " + data.message);
-          console.log("room name is: " + rooms[data.roomid].name);
+          // console.log(data.name + "sends: " + data.message);
+          // console.log("room name is: " + rooms[data.roomid].name);
+          //save type message to log on successful send
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           break;
         case "pin" :
           rooms[data.roomid].pinPost(data);
           notifyUsers(data.roomid, "pin", data, people[socket.id].name);
+          chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           break;
         case "link" :
           rooms[data.roomid].pinPost(data);
-          notifyUsers(data.roomid, "link", data, people[socket.id].name)
+          notifyUsers(data.roomid, "link", data, people[socket.id].name);
+          chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           break;
         }
       
