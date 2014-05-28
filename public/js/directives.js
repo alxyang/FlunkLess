@@ -38,13 +38,16 @@ app.directive("pin", function(){
       post : '=post'
     },
     link : function(scope, el, attrs){
+      console.log(scope);
       if(scope.post.type == 'link'){
         if(scope.post.url.slice(0,3) == "www"){
           scope.post.url = "http://" + scope.post.url;
         }
         $(el).html("<a target='_blank' href='"+scope.post.url+ "'>"+scope.post.message + '</a>');
       }else if(scope.post.type == 'pin'){
-        $(el).html("<p>"+scope.post.message+"</p>")
+        $(el).html(scope.post.message);
+      }else if (scope.post.type == "question"){
+        $(el).html("<b>"+scope.post.message+"</p>");
       }
     }
   }

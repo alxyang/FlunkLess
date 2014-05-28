@@ -2,7 +2,7 @@
 
 function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
 
-  $scope.viewOptions = ["chat", "create", "manage", "chatLog"];
+  $scope.viewOptions = ["main", "chat", "create", "manage", "chatLog"];
   $scope.navView = $scope.viewOptions[0];
 
   $scope.usersCount = 0;
@@ -13,22 +13,28 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
   $scope.error = {};
   $scope.logs = [];
 
-  $scope.modes = ["Send", "Link", "Pin", "To Professor"];
+  $scope.modes = ["Send", "Link", "Announce", "Question"];
   $scope.categories = [];
   $scope.category = "";
 
   $scope.currentRooms = [];
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
+  $scope.pinViews = [{name : "Announcements", type : "pin"},
+                     {name : "Questions", type : "question"}, 
+                     {name : "Links", type : "link"}];
+  $scope.pinView = 0;
   $scope.roomsToLoad = [];
 
-  var emptyRoom = {
-    name : "Place Room Name Here",
-    description : "Place Description Here",
-    invitedUsers : [],
-    status : "New"
+  $scope.tags = [];
+
+  var emptyRoom = function(){
+    this.name = "Place Room Name Here",
+    this.description ="Place Description Here",
+    this.invitedUsers  =[],
+    this.status ="New"
   }
 
-  $scope.modifyRoom = emptyRoom;
+  $scope.modifyRoom = new emptyRoom();
 
   function getClassIDS(id){
         socket.emit("getClassID", id, function(classids){
@@ -126,18 +132,31 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
           message : this.message,
           type : 'pin'
         });
+      }else if (writeMode == $scope.modes[3]){
+        socket.emit("send", {
+          name : this.username,
+          roomid : id,
+          message : this.message,
+          type : 'question'
+        });
       }
       this.message = "";
     }
 
   }
 
+  $scope.setUpNewRoom = function(){
+    $scope.modifyRoom = new emptyRoom();
+  }
+
   $scope.submitRoom = function(room){
     console.log(room);
     if(room.status == "New"){
       $scope.createRoom(room);
+      $scope.modifyRoom = new emptyRoom();
     }else{
-
+      console.log("UPDATING ROOM");
+      socket.emit('updateRoom', room);
     }
   }
 
@@ -151,6 +170,7 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
         if (roomExists) {
           $scope.error.create = 'Room ' + room + ' already exists.';
         } else {
+          room.status = "Created";
           socket.emit('createRoom', room);
         }
       });
@@ -175,26 +195,13 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
     //TODO: need a check here to see if user has already added room!
     room.writeMode = "Send";
     room.messageQueue = 0;
-    $scope.currentRooms.unshift(room);
-    var index = room.name.indexOf("-");
-    if(index < 5){
-      index = 12;
-    }
-    var roomTab = $("<li><a>"+room.name.slice(0, index) + " </a></li>");
-    var exit = $("<div class='badge bg-red'></div>");
-    room.displayBadge = exit;
-    room.displayTab = roomTab;
-    roomTab.find("a").append(exit);
-    roomTab.click(function(){
-      $scope.$apply(function(){
-        $scope.viewPage = room.id;
-        room.messageQueue = 0;
-         room.displayBadge.text(room.messageQueue);
-      });
-    });
-
+    $scope.currentRooms.unshift(room)
     socket.emit('joinRoom', room.id);
-    $(".classtabs").prepend(roomTab);
+  }
+
+  $scope.switchRoom = function(room){
+    room.messageQueue = 0;
+    $scope.viewPage = room.id;
   }
 
   $scope.leaveRoom = function(room) {
@@ -291,6 +298,10 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
     $scope.messages.push(message);
   });
 
+  socket.on("tag", function(tag){
+    $scope.tags.unshift(tag);
+  })
+
   socket.on('sendChatMessageHistory', function(data) {
     angular.forEach(data, function(messages, key) {
       $scope.messages.push(messages);
@@ -323,7 +334,6 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
           if(room.id != $scope.viewPage){
             //console.log(data.posts, room.posts);
             room.messageQueue += data.posts.length - room.posts.length;
-            room.displayBadge.text(room.messageQueue);
           }
           room.posts = data.posts;
           room.pinnedPosts = data.pinnedPosts;

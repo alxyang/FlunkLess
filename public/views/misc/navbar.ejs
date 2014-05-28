@@ -1,17 +1,26 @@
+
 <nav class="navigation-bar">
     <nav class="navigation-bar-content" ng-hide="user.name == null">
-        <item class="element"><span class="icon-comments-4"> FlunkLess </item>
+        <item class="element"><span class="icon-comments-4">
+            <a ng-click="navView='main'" class="fg-white" >FlunkLess</a>
+        </item>
         <item class="element-divider"></item>
         <item class="element"><a ng-click="navView='chat'" class="fg-white">Chat</a></item>
         <item class="element-divider"></item>
-        <item class="element"><a ng-click="navView='create'" class="fg-white">Create Room</a></item>
-        <item class="element-divider"></item>
-        <item class="element" ng-click="navView='chatLog'"><a class="fg-white">View Chat Log</a></item>
-        <item class="element"><a ng-click="navView='manage'" class="fg-white">Manage Rooms</a></item>
+        <item class="element"><a ng-click="navView='create'" class="fg-white">Manage Groups</a></item>
         <span class="element-divider place-right"></span>
-            <a class="element place-right" href="#"><span><i class="icon-cog"></i></a>
+        <div class="element place-right">
+            <a class="dropdown-toggle" href="#">
+                <div class="badge">{{tags.length}}</div>
+            </a>
+            <ul class="dropdown-menu place-right" data-role="dropdown">
+                <li ng-repeat="tag in tags">
+                    <a href="#">{{tag}}</a>
+                </li>
+            </ul>
+        </div>
             <a class="element place-right" href="#">
-                <span>Hello, {{user.realname == null? user.name : user.realname}}</span>
+                <span>Hello, {{user.realname}}({{user.name}})</span>
             </a>
     </nav>
 </nav>

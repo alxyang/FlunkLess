@@ -83,6 +83,26 @@ function notifyUsers(roomid, type, data, sender){
   })
 }
 
+function handleTag(data, sender, room, io){
+  var messageFragments = data.message.split(" ");
+  var sendees = [];
+  var message = sender.name + " has tagged you in a post on " + room.name
+     + '! The message was "' +data.message + '"';
+  messageFragments.forEach(function(fragment){
+    if(fragment[0] == "@"){
+      var potentialUser = fragment.slice(1);
+      for(var id in people){
+        if(people[id].name == potentialUser && sendees.indexOf(people[id].socketid) < 0){
+          sendees.push(people[id].socketid);
+        }
+      }
+    }
+  });
+  sendees.forEach(function(sendee){
+    utils.sendToUser(io, sendee, "tag", message);
+  })
+}
+
   io.sockets.on('connection', function (socket) {
 
     socket.on('joinServer', function(data) {
@@ -101,6 +121,7 @@ function notifyUsers(roomid, type, data, sender){
           }
           people[socket.id] = user;
           utils.sendToSelf(socket,'listAvailableChatRooms', listAvailableRooms(socket,rooms));
+          utils.sendToSelf(socket,'userData', user);
         }
       }
     });
@@ -122,6 +143,26 @@ function notifyUsers(roomid, type, data, sender){
           utils.sendToUser(io, person.socketid, "invitedToRoom", newroom);
         })
       }
+    });
+
+    socket.on("updateRoom", function(room){
+      var currentRoom = rooms[room.id];
+      console.log(room.invitedUsers);
+      console.log(currentRoom.invitedUsers)
+      var newPeople = room.invitedUsers.filter(function(e){
+        for(var i = 0; i < currentRoom.invitedUsers.length; i++){
+          if(currentRoom.invitedUsers[i].socketid == e.socketid){
+            return false;
+          }
+        }
+        return true;
+      });
+      currentRoom.invitedUsers = room.invitedUsers;
+      newPeople.forEach(function(person){
+        utils.sendToUser(io, person.socketid, 'listAvailableChatRooms', listAvailableRooms(person,rooms));
+        utils.sendToUser(io, person.socketid, "invitedToRoom", currentRoom);
+      })
+      
     });
 
     socket.on('joinRoom', function(id) {
@@ -195,10 +236,8 @@ function notifyUsers(roomid, type, data, sender){
       switch(data.type){
         case "message" :  
           rooms[data.roomid].addPost(data);
-          // console.log(data.name + "sends: " + data.message);
-          // console.log("room name is: " + rooms[data.roomid].name);
-          //save type message to log on successful send
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
+          handleTag(data, people[socket.id], rooms[data.roomid], io);
           break;
         case "pin" :
           rooms[data.roomid].pinPost(data);
@@ -209,6 +248,12 @@ function notifyUsers(roomid, type, data, sender){
           rooms[data.roomid].pinPost(data);
           notifyUsers(data.roomid, "link", data, people[socket.id].name);
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
+          break;
+        case "question" :
+          rooms[data.roomid].pinPost(data);
+          notifyUsers(data.roomid, "question", data, people[socket.id].name);
+          chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
+          handleTag(data, people[socket.id], rooms[data.roomid], io);
           break;
         }
       

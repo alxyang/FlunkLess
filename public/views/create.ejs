@@ -7,20 +7,22 @@
         	<li><a ng-click="changeModifiedRoom(room)">{{room.name}}</a></li>
         </ul>
 		 <ul>
-            <li><a>Create Room</a></li>
+            <li><a ng-click="setUpNewRoom()">Create Room</a></li>
         </ul>
     </nav>
 	<div class="span9">
-		<form>
+		<form >
+		<div ng-show="modifyRoom.status=='New'">
 		<legend>Create a room</legend>
 		<label>Name</label>
-		<div class="input-control text">
-		    <input type="text" ng-model="modifyRoom.name" placeholder="input text"/>
-		    <button class="btn-clear"></button>
-		</div>
-		<label>Description</label>
-		<div class="input-control textarea">
-		    <textarea  ng-model="modifyRoom.description" ></textarea>
+			<div class="input-control text">
+		    	<input type="text" ng-model="modifyRoom.name" placeholder="input text"/>
+		    	<button class="btn-clear"></button>
+			</div>
+			<label>Description</label>
+			<div class="input-control textarea">
+		    	<textarea  ng-model="modifyRoom.description" ></textarea>
+			</div>
 		</div>
 		<label>Invite Users</label>
 		Users you've invited will be sent a request to join your room. They can accept or decline.
