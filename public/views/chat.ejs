@@ -5,7 +5,7 @@
         </ul>
         <ul >
             <li  ng-repeat="room in currentRooms">
-                <a ng-click="switchRoom(room)"> {{room.name.slice(0,12)}}
+                <a ng-click="switchRoom(room);getChatLog(room.name)"> {{room.name.slice(0,12)}}
                  <div class='badge bg-red' ng-show="room.messageQueue > 0">{{room.messageQueue}}</div></a>
                 
             </li>

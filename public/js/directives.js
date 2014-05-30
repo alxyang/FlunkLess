@@ -52,3 +52,4 @@ app.directive("pin", function(){
     }
   }
 })
+
