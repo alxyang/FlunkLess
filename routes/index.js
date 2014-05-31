@@ -9,7 +9,11 @@ exports.chatLogs = function(req, res){
   return chatLogModel.chatLog.findOne({ room: req.params.id }, function (err, data) {
     if (err) { console.err(err); }
     else{
-    res.json(data.roomMsgs);
-  }
+    	if(data != null){
+    		res.json(data.roomMsgs);
+    	}else{
+    		res.json([]);
+    	}
+  	}
   });
 }

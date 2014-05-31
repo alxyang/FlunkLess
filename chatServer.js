@@ -204,18 +204,12 @@ function handleTag(data, sender, room, io){
       console.log(roomToJoin);
       var peopleIn = roomToJoin.getListOfPeople();
       if(roomToJoin.visibility == true){
-        utils.sendToAllConnectedClients(io, 'roomData', {room : id+"", people : peopleIn});
+        utils.sendToAllConnectedClients(io, 'roomData', {room : id, people : peopleIn});
       }else{
         roomToJoin.invitedUsers.forEach(function(person){
-          utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
+          utils.sendToUser(io, person.socketid, "roomData", {room : id, people : peopleIn});
         })
       }
-      utils.sendToSelf(socket, 'roomPosts',
-        {
-            room : id, 
-            posts : roomToJoin.posts,
-            pinnedPosts : roomToJoin.pinnedPosts
-        });
         if(socket.fbUser != null){
           var index = socket.fbUser.rooms.indexOf(id);
           if(index >= 0){
@@ -244,7 +238,7 @@ function handleTag(data, sender, room, io){
           notifyUsers(data.roomid, "pin", data, people[socket.id].name);
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           break;
-        case "link" :
+        case "link" :n
           rooms[data.roomid].pinPost(data);
           notifyUsers(data.roomid, "link", data, people[socket.id].name);
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
