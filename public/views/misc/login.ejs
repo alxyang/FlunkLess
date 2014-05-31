@@ -8,13 +8,37 @@
          Please enter your screenname below and log in. This app requires <br> Facebook to access credentials.
     </p>
     <br>
-    <form class="form-inline" role="form">
+    <form name="signup_form" class="form-inline" role="form" ng-submit='FBLogin()' novalidate >
+          <fieldset>
         <div class="form-group">
-            <input type="text" class="form-control" name="username" id="username" ng-model="username" placeholder="Enter desired name">
+            <input type="text" 
+            class="form-control" 
+            id="username" 
+            ng-model="username" 
+            name="username" 
+            placeholder="Enter Name" 
+            ng-minlength=5 
+            ng-maxlength=20 
+            required />
         </div>
-        <button type="submit" class="bg-lightBlue fg-white" ng-click='FBLogin()'>Log in</button>
+        <button type="submit" class="bg-lightBlue fg-white" ng-disabled="signup_form.$invalid">Log in</button>
         <!-- <button type="submit" class="bg-lightBlue fg-white" ng-click='joinServer()'>Log in (admin)</button> -->
         <p ng-show="loading">Loading...</p>
+          <div class="error-container" ng-show="signup_form.username.$invalid && signup_form.username.$dirty">
+            <small class="error" 
+                ng-show="signup_form.username.$error.required">
+                Your name is required.
+            </small>
+            <small class="error" 
+                    ng-show="signup_form.username.$error.minlength">
+                    Your name is required to be at least 5 characters
+            </small>
+            <small class="error" 
+                    ng-show="signup_form.username.$error.maxlength">
+                    Your name cannot be longer than 20 characters
+            </small>
+          </div>
+          </fieldset>
     </form>
 
 

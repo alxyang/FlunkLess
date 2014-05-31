@@ -70,7 +70,6 @@ return{
     link: function(scope, element, attributes) {
         scope.$on("Finished",function(){
             var chat_height = element.outerHeight();
-            console.log(chat_height);
             element.scrollTop(chat_height); 
         });
     }

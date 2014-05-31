@@ -1,5 +1,12 @@
+
 function Room(name, id, owner, visibility) {
   this.name = name;
+  //this needs to be kept in here
+  var classCode = name;
+  name.replace(/(\S+ \S+) - \S+/g, function(match, $1){
+    classCode = $1;
+  });
+  this.code = classCode;
   this.id = id;
   this.owner = owner;
   this.posts = [];
@@ -9,6 +16,7 @@ function Room(name, id, owner, visibility) {
   this.pinnedPosts = [];
   this.category = null;
 };
+
 
 Room.prototype.addPerson = function(personID) {
     this.people.push(personID);

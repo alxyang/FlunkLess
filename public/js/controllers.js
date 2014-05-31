@@ -52,6 +52,7 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
         });
   }
 
+
   $scope.changeModifiedRoom = function(room){
     $scope.modifyRoom = room;
   }
