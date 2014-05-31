@@ -254,6 +254,8 @@ function handleTag(data, sender, room, io){
           notifyUsers(data.roomid, "question", data, people[socket.id].name);
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           handleTag(data, people[socket.id], rooms[data.roomid], io);
+          data.message = 'has asked a question, "'+data.message + '"';
+          rooms[data.roomid].addPost(data);
           break;
         }
       

@@ -26,6 +26,7 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
   $scope.roomsToLoad = [];
 
   $scope.tags = [];
+  $scope.colors = [];
 
   var emptyRoom = function(){
     this.name = "Place Room Name Here",
@@ -209,7 +210,6 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
     if(room != null){
       //console.log("LEAVING ROOM " + roomid);
       socket.emit('leaveRoom', room.id);
-      room.displayTab.remove(); 
       $scope.currentRooms.splice($scope.currentRooms.indexOf(room),1);
       if($scope.currentRooms.length == 0){
         $scope.viewPage = "addroom";
