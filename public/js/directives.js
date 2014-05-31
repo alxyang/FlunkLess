@@ -52,3 +52,27 @@ app.directive("pin", function(){
     }
   }
 })
+
+app.directive('scrollItem',function(){
+    return{
+    restrict: "A",
+    link: function(scope, element, attributes) {
+        if (scope.$last){
+           scope.$emit("Finished");
+       }
+    }
+   }
+});
+
+app.directive('scrollIf', function() {
+return{
+    restrict: "A",
+    link: function(scope, element, attributes) {
+        scope.$on("Finished",function(){
+            var chat_height = element.outerHeight();
+            element.scrollTop(chat_height); 
+        });
+    }
+   }
+  });
+
