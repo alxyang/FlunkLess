@@ -4,7 +4,7 @@ module.exports = function(server) {
   , Room = require('./utils/room')
   , Person = require("./utils/person")
   , people = {}
-  , rooms = {}
+  , rooms = {} 
   , chatHistory = {}
   , roomPosts = {}
   , io = require('socket.io').listen(server)
@@ -28,6 +28,7 @@ module.exports = function(server) {
   });
 
 function listAvailableRooms(socket, rooms){
+  console.log("listing available rooms");
   var newrooms = {};
   for(var i in rooms){
     if(rooms[i].visibility || rooms[i].invitedUsers.indexOf(socket)>= 0){
@@ -106,6 +107,7 @@ function handleTag(data, sender, room, io){
   io.sockets.on('connection', function (socket) {
 
     socket.on('joinServer', function(data) {
+      console.log("entering joinserver");
       var fbinfo = data.fbinfo;
       var exists = false;
       _.find(people, function(k, v) {
@@ -289,6 +291,7 @@ function handleTag(data, sender, room, io){
     userQuery.findByID(fbid, function(err, user){
       if(user != null)
         cb(user.rooms)
+        console.log(user.rooms);
     });
   });
 
