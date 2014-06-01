@@ -1,35 +1,35 @@
 <div class="row">
-    <nav class="sidebar light span3">
-        <ul>
-            <li class="title">Your Rooms</li>
-        </ul>
-        <ul >
-            <li  ng-repeat="room in currentRooms">
-                <a ng-click="switchRoom(room);getChatLog(room.name);"> {{room.code}}
-                 <div class='badge bg-red' ng-show="room.messageQueue > 0">{{room.messageQueue}}</div></a>
-                
-            </li>
-        </ul>
-        <ul>
-            <li ng-click='viewPage = "addroom"'>
-                <a>Manage Rooms</a>
-            </li>
-        </ul>
-    </nav>
-    <div class="span12">
-        <div style="padding-left: 20px;">
-            <div id="addroom" ng-show="viewPage == 'addroom'">
-                <div ng-show="grid">
-                    <%- include rooms/gridRoomLayout %>
-                </div>
-                <div ng-show="!grid">
-                    <%- include rooms/listRoomLayout %>
-                </div>
+    <div class="span2">
+        <nav class="sidebar light">
+            <ul>
+                <li class="title">Your Rooms</li>
+            </ul>
+            <ul >
+                <li  ng-repeat="room in currentRooms">
+                    <a ng-click="switchRoom(room);getChatLog(room.name);"> {{room.code}}
+                     <div class='badge bg-red' ng-show="room.messageQueue > 0">{{room.messageQueue}}</div></a>
+                    
+                </li>
+            </ul>
+            <ul>
+                <li ng-click='viewPage = "addroom"'>
+                    <a>Manage Rooms</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="span10">
+        <div id="addroom" ng-show="viewPage == 'addroom'">
+            <div ng-show="grid">
+                <%- include rooms/gridRoomLayout %>
             </div>
+            <div ng-show="!grid">
+                <%- include rooms/listRoomLayout %>
+            </div>
+        </div>
 
-            <div ng-repeat="room in currentRooms">
-                <%- include rooms/room %>
-            </div>
+        <div ng-repeat="room in currentRooms">
+            <%- include rooms/room %>
         </div>
     </div>
 </div>

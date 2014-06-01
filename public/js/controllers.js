@@ -19,10 +19,10 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
 
   $scope.currentRooms = [];
   $scope.viewPage = "addroom"; // this is a hack for the buggy tabs
-  $scope.pinViews = [{name : "Announcements", type : "pin"},
-                     {name : "Questions", type : "question"}, 
-                     {name : "Links", type : "link"}];
-  $scope.pinView = 0;
+  $scope.pinViews = [{name : "Announcements", type : "pin", active : true},
+                     {name : "Questions", type : "question", active : true}, 
+                     {name : "Links", type : "link", active : true}];
+  $scope.pinMap = {'pin' : 0, 'question' : 1, 'link' : 2}
   $scope.roomsToLoad = [];
 
   $scope.tags = [];

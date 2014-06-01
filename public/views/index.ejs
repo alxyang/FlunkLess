@@ -3,21 +3,25 @@
 <%- include misc/header.ejs %>
 
     <body class="metro" ng-controller="ChatAppCtrl" ng-cloak>
-        <%- include misc/navbar.ejs %>
+        <div class="grid fluid">
+            <%- include misc/navbar.ejs %>
             <!-- Begin page content -->
 
-            <div ng-show="!joined" style="margin:auto;">
-                <%- include misc/login.ejs %>
+            <div class="container">
+                <div ng-show="!joined" style="margin:auto;">
+                    <%- include misc/login.ejs %>
+                </div>
+                <div ng-show="joined && navView == 'main'" ng-cloak>
+                    <%- include main.ejs %>
+                </div>
+                <div ng-show="joined && navView == 'chat'" ng-cloak>
+                    <%- include chat.ejs %>
+                </div>
+                <div ng-show="joined && navView == 'create'" ng-cloak>
+                    <%- include create.ejs %>
+                </div>
             </div>
-            <div ng-show="joined && navView == 'main'" class="grid" ng-cloak>
-                <%- include main.ejs %>
-            </div>
-            <div ng-show="joined && navView == 'chat'" class="grid" ng-cloak>
-                <%- include chat.ejs %>
-            </div>
-            <div ng-show="joined && navView == 'create'" class="grid" ng-cloak>
-                <%- include create.ejs %>
-            </div>
+        </div>
     </body>
 
 </html>
