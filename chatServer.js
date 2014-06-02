@@ -238,7 +238,7 @@ function handleTag(data, sender, room, io){
           notifyUsers(data.roomid, "pin", data, people[socket.id].name);
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           break;
-        case "link" :n
+        case "link" :
           rooms[data.roomid].pinPost(data);
           notifyUsers(data.roomid, "link", data, people[socket.id].name);
           chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
