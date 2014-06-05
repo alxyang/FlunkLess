@@ -35,7 +35,8 @@
                 <div class="panel-content">
                     <div id="general" class="frame">
                         <ul style="height:250px;overflow:auto" scroll-if>
-                            <li class="list-unstyled" ng-repeat="log in logs" ng-cloak scroll-item ng-class="{dark: $index % 2 === 0}">{{log.created | date:'MM/dd/yyyy @ h:mma'}} <strong>{{log.sender}}:</strong> {{log.message}}</li>
+                            <li class="list-unstyled" ng-repeat="post in room.posts" ng-cloak scroll-item ng-class="{dark: $index % 2 === 0}">
+				<strong>{{post.name}}:</strong> {{post.message}}</li>
                         </ul>
                     </div>
                     <br>
