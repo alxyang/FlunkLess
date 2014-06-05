@@ -43,3 +43,34 @@
   }
 
   module.exports.saveToLog = saveToLog;
+
+  //needs to return array of posts for chatLog
+  var getTheLog = function(roomName, callback){
+    var history = [];
+    //so basically needs to return roomMsgs but in room format
+    chatLog.findOne({room: roomName}, function (err, res) {
+      // console.log(res);
+      var target_room = res;
+
+            // console.log(messages_obj_array);
+      //push each message in obj array to a posts array
+      var history = [];
+
+      if (target_room.roomMsgs !== undefined){
+        for (i = 0; i < target_room.roomMsgs.length; i++){
+                // console.log(target_room.roomMsgs[i].sender + " sends: " + target_room.roomMsgs[i].message);
+            var room_posts_obj = {
+                name: target_room.roomMsgs[i].sender,
+                message: target_room.roomMsgs[i].message
+            };
+            history.push(room_posts_obj);
+        }
+      }
+      // console.log(history);
+            callback(history);
+    });
+    
+  }
+
+
+  module.exports.getTheLog = getTheLog;

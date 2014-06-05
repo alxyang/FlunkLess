@@ -71,12 +71,11 @@ function notifyUsers(roomid, type, data, sender){
       if(user.rooms.indexOf(roomid)>= 0){
         var subject = "A " + type + " from " + sender;
         if(type == "pin"){
-          console.log("emailing a pin")
-        //  emailUtil.email(user.email, subject, data.message, sender);
+          console.log("emailing a pin");
+          // emailUtil.email(user.email, subject, data.message, sender);
         }else if(type == "link"){
-          console.log("emailing a pin")
-         //  emailUtil.email(user.email, subject, "The message was '"+data.message+"' and the link was " + data.link,
-           // sender);
+          console.log("emailing a link");
+          // emailUtil.email(user.email, subject, "The message was '"+data.message+"' and the link was " + data.link, sender);
         }
       }
     });
@@ -172,6 +171,8 @@ function handleTag(data, sender, room, io){
     socket.on('joinRoom', function(id) {
     if (typeof people[socket.id] !== 'undefined') {
       var roomToJoin = rooms[id];
+      var roomToJoin_name = rooms[id].name;
+      console.log(roomToJoin_name);
       socket.join(roomToJoin.id); // joins actual room
       roomToJoin.addPerson(people[socket.id]); // adds pointer to person from room
       people[socket.id].addRoom(roomToJoin); // adds pointer to room from person
@@ -183,12 +184,18 @@ function handleTag(data, sender, room, io){
           utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
         })
       }
-      utils.sendToSelf(socket, 'roomPosts',
-        {
-            room : id, 
-            posts : roomToJoin.posts,
-            pinnedPosts : roomToJoin.pinnedPosts
-        });
+
+      //how to make this async......
+      chatLog.getTheLog(roomToJoin_name, function(val){
+          utils.sendToSelf(socket, 'roomPosts',
+          {
+              room : id, 
+              posts : val, //insert chat history here?
+              // posts : chatLog.getTheLog(roomToJoin_name), 
+              pinnedPosts : roomToJoin.pinnedPosts
+          });
+      });
+
         if(socket.fbUser != null){
           if(socket.fbUser.rooms.indexOf(id)< 0){
             socket.fbUser.rooms.push(id);
