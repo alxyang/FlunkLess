@@ -9,11 +9,11 @@
         <item class="element-divider"></item>
         <item class="element"><a ng-click="navView='create'" class="fg-white">Manage Your Rooms</a></item>
         <span class="element-divider place-right"></span>
-        <div class="element place-right">
-            <a class="dropdown-toggle" href="#">
+        <div class="element place-right dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                 <div class="badge">{{tags.length}}</div>
             </a>
-            <ul class="dropdown-menu place-right" data-role="dropdown">
+            <ul class="dropdown-menu place-right" role="menu">
                 <li ng-repeat="tag in tags">
                     <a href="#" ng-click="switchRoom(tag);remove(tags, $index);">{{tag.content}}</a>
                 </li>
