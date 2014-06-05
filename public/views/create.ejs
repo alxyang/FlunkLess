@@ -1,13 +1,13 @@
 <div class="row">
 	<nav class="sidebar light span2">
         <ul>
-            <li class="title">Your Rooms</li>
+            <li class="title">Manage Rooms</li>
         </ul>
         <ul ng-repeat="room in currentRooms | filter: checkPrivacy">
         	<li><a ng-click="changeModifiedRoom(room)">{{room.name}}</a></li>
         </ul>
-		 <ul>
-            <li><a ng-click="setUpNewRoom()">Create Room</a></li>
+		    <ul>
+          <li><a ng-click="setUpNewRoom()">Create Room</a></li>
         </ul>
     </nav>
 	<div class="span10">
@@ -16,7 +16,7 @@
 				<legend>Create a room</legend>
 				<label>Name</label>
 					<div class="input-control text">
-				    	<input type="text" ng-model="modifyRoom.name" placeholder="Greatest Room Ever!"/>
+				    	<input type="text" ng-model="modifyRoom.name" placeholder="Enter Room Name"/>
 				    	<button class="btn-clear"></button>
 					</div>
 			</div>

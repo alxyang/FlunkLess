@@ -1,4 +1,3 @@
-
   var mongoose = require("mongoose");
   var Schema = mongoose.Schema
       , ObjectId = Schema.ObjectId;
@@ -36,6 +35,7 @@
         message: cmessage
     };
 
+    //need check here to make sure room already exists.  if it doesnt, don't execute this.
     chatLog.update({ 'room': roomName },
          {$push: { 'roomMsgs' : saveMessage }},{upsert:true}, function(err, data) { 
             // console.log("message recieved and saved to db");

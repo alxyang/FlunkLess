@@ -16,6 +16,7 @@ function Room(name, id, owner, visibility) {
   this.people = [];
   this.pinnedPosts = [];
   this.category = null;
+  this.exists = false;
 };
 
 

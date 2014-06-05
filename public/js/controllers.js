@@ -262,7 +262,19 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
     angular.forEach(data, function(room, key) {
       room.writeMode = "Send";
       room.messageQueue = 0;
-      $scope.rooms.push(room);
+      var duplicate_flag = false;
+      //check to see if room already exists
+      for (var i = 0; i <= $scope.rooms.length; i++){
+        if($scope.rooms[i] !== undefined){
+          if($scope.rooms[i].name === room.name){
+            room.exists = true;
+          }
+        }
+      }
+      //if it does, dont push it to the rooms list
+      if(room.exists !== true){
+        $scope.rooms.push(room);
+      }
       angular.forEach(room.people, function(e){
         var index = -1;
         for(var i = 0; i < $scope.users.length; i++){
@@ -291,7 +303,7 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
           }
         } 
       })
-        $scope.roomsToLoad = [];
+      $scope.roomsToLoad = [];
     }
   });
 
