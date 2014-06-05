@@ -2,11 +2,12 @@
 function Room(name, id, owner, visibility) {
   this.name = name;
   //this needs to be kept in here
-  var classCode = name;
-  name.replace(/(\S+ \S+) - \S+/g, function(match, $1){
-    classCode = $1;
-  });
-  this.code = classCode;
+  if(name.indexOf("-") < 0){
+    this.displayName = name;
+  }else{
+      this.displayName = name.slice(0,name.indexOf("-"));
+  }
+
   this.id = id;
   this.owner = owner;
   this.posts = [];

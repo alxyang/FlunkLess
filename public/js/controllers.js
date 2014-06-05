@@ -29,8 +29,8 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
   $scope.colors = [];
 
   var emptyRoom = function(){
-    this.name = "Place Room Name Here",
-    this.description ="Place Description Here",
+    this.name = "",
+    this.description ="",
     this.invitedUsers  =[],
     this.status ="New"
   }

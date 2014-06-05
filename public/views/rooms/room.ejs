@@ -14,12 +14,6 @@
 
                 </div>
                 <div class="panel-content" style="height:100px; overflow:scroll;">
-                    <div class="button-set">
-                        Show <button ng-click="view.active = !view.active" ng-class="{'active' : view.active}" ng-repeat="view in pinViews">
-                            {{view.name}}
-                        </button>
-                    </div>
-
                     <table ng-repeat="item in room.pinnedPosts.slice().reverse()">
                         <tr ng-show="pinViews[pinMap[item.type]].active">
                             <td><b>{{item.name}} </b> : <pin post="item"></pin></td>
