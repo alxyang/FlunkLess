@@ -6,8 +6,7 @@
                 <div class="panel-header  bg-lightBlue fg-white">
                     Pinned Posts
                     <div class="button-set" style="float:right;">
-                        <button>Show All Posts</button> 
-                        <button ng-click="view.active = !view.active" ng-class="{'active' : view.active}" ng-repeat="view in pinViews">
+                        <button ng-click="view.active = !view.active" ng-class="{'success' : view.active}" ng-repeat="view in pinViews">
                             {{view.name}}
                         </button>
                     </div>
@@ -24,7 +23,7 @@
             <div class="panel" ng-show = 'navView != "chatLog"'>
                 <div class="panel-header  bg-lightBlue fg-white">
                     Chat Room
-                    <button style="float: right;"><a href = "" ng-click="navView='chatLog';getChatLog(room.name)">Chat Log</a></button>
+                    <button class="primary" style="float: right;"><a href = "" ng-click="navView='chatLog';getChatLog(room.name)">Chat Log</a></button>
                 </div>
                 <div class="panel-content">
                     <div id="general" class="frame">
@@ -63,11 +62,12 @@
                             </div>
                         </a>
                     </div>
-                    <a href="#" class="list">
+                    <a href="#" class="list bg-gray fg-white">
                         <div class="list-content">
                             <div ng-click="leaveRoom(room)" class="data">Leave Room</div>
                         </div>
                     </a>
+                    
                 </div>
             </div>
         </div>

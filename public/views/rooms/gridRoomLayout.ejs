@@ -4,7 +4,7 @@
             <div>
                 <div class="table-responsive">
                     <div ng-repeat="room in rooms | filter : {name : roomname} | filter: addedInRoom" ng-cloak>
-                        <div class="tile double " ng-click='addRoom(room)'>
+                        <div class="tile double " ng-click='addRoom(room);'>
                             <button class="info">
                                 <i ng-class="{'icon-plus-2' : 'true'}"></i>
                             </button>
