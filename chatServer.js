@@ -86,7 +86,11 @@ function notifyUsers(roomid, type, data, sender){
 function handleTag(data, sender, room, io){
   var messageFragments = data.message.split(" ");
   var sendees = [];
-  var message = sender.name + " has tagged you in a post on " + room.name
+  var message = {
+    content: '',
+    id: room.id 
+  };
+  message.content = sender.name + " has tagged you in a post on " + room.name
      + '! The message was "' +data.message + '"';
   messageFragments.forEach(function(fragment){
     if(fragment[0] == "@"){

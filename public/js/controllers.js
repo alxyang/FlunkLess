@@ -202,10 +202,17 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
   }
 
   $scope.switchRoom = function(room){
-    room.messageQueue = 0;
+    for (var i =0; i< $scope.currentRooms.length; i++){
+      if ($scope.currentRooms[i].id == room.id){
+        $scope.currentRooms[i].messageQueue = 0;
+        // console.log("set it messageQueue to 0 for " + $scope.currentRooms[i].name);
+      }
+    }
     $scope.viewPage = room.id;
   }
-
+  $scope.remove = function(array, index){
+      array.splice(index, 1);
+  }
   $scope.leaveRoom = function(room) {
     $scope.message = '';
     if(room != null){

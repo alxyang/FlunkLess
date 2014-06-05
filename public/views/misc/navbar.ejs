@@ -15,7 +15,7 @@
             </a>
             <ul class="dropdown-menu place-right" data-role="dropdown">
                 <li ng-repeat="tag in tags">
-                    <a href="#">{{tag}}</a>
+                    <a href="#" ng-click="switchRoom(tag);remove(tags, $index);">{{tag.content}}</a>
                 </li>
             </ul>
         </div>
