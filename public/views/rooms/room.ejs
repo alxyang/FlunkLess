@@ -1,14 +1,21 @@
 <div id="{{room.id}}" ng-show='viewPage == room.id' style="height:100%">
+    <h2>{{room.name}}</h2>
     <div class="row">
         <div class="span9">
-            <div class="panel" >
+            <div class="panel">
                 <div class="panel-header  bg-lightBlue fg-white">
-                    Important Posts
+                    Pinned Posts
+                    <div class="button-set" style="float:right;">
+                        <button>Show All Posts</button> 
+                        <button ng-click="view.active = !view.active" ng-class="{'active' : view.active}" ng-repeat="view in pinViews">
+                            {{view.name}}
+                        </button>
+                    </div>
+
                 </div>
                 <div class="panel-content" style="height:100px; overflow:scroll;">
-                    Show:
                     <div class="button-set">
-                        <button ng-click="view.active = !view.active" ng-class="{'active' : view.active}" ng-repeat="view in pinViews">
+                        Show <button ng-click="view.active = !view.active" ng-class="{'active' : view.active}" ng-repeat="view in pinViews">
                             {{view.name}}
                         </button>
                     </div>
@@ -22,7 +29,8 @@
             </div>
             <div class="panel" ng-show = 'navView != "chatLog"'>
                 <div class="panel-header  bg-lightBlue fg-white">
-                    {{room.name}}
+                    Chat Room
+                    <button style="float: right;"><a href = "" ng-click="navView='chatLog';getChatLog(room.name)">Chat Log</a></button>
                 </div>
                 <div class="panel-content">
                     <div id="general" class="frame">
@@ -39,7 +47,7 @@
                         <input type="text" ng-model="urllink" ng-show="room.writeMode == 'Link'" placeholder="Place URL Link here" class="size5 input-control text"></input>
                         <button ng-click="send(room.id, room.writeMode);getChatLog(room.name)">Submit</button>
                     </form>
-                    <a href = "" ng-click="navView='chatLog';getChatLog(room.name)">Chat Log</a>
+                    
                 </div>
             </div>
             <div class="panel" ng-show = 'navView == "chatLog"'>
