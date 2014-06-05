@@ -6,7 +6,7 @@
             </ul>
             <ul >
                 <li  ng-repeat="room in currentRooms">
-                    <a ng-click="switchRoom(room);"> {{room.code}}
+                    <a ng-class="{'bg-darkBlue': viewPage == room.id, 'bg-white' : viewPage == room.id}" ng-click="switchRoom(room);"> {{room.code}}
                      <div class='badge bg-red' ng-show="room.messageQueue > 0">{{room.messageQueue}}</div></a>
                     
                 </li>
