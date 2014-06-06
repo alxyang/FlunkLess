@@ -184,24 +184,35 @@ function handleTag(data, sender, room, io){
           utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
         })
       }
+      if(rooms[id].visiblity === false){
+        //how to make this async......
+        chatLog.getTheLog(roomToJoin_name, function(val){
+            console.log(val);
 
-      //how to make this async......
-      chatLog.getTheLog(roomToJoin_name, function(val){
-          console.log(val);
+            for(var i = 0; i < val.length; i++){
+              rooms[id].addPost(val[i]);
+            }
 
-          for(var i = 0; i < val.length; i++){
-            rooms[id].addPost(val[i]);
-          }
-
+            utils.sendToSelf(socket, 'roomPosts',
+            {
+                room : id, 
+                posts : roomToJoin.posts, //insert chat history here?
+                // posts : chatLog.getTheLog(roomToJoin_name), 
+                pinnedPosts : roomToJoin.pinnedPosts,
+                message_count: false
+            });
+        });
+      } else{
+          // if private room, we dont want to get the chat logs
           utils.sendToSelf(socket, 'roomPosts',
-          {
-              room : id, 
-              posts : roomToJoin.posts, //insert chat history here?
-              // posts : chatLog.getTheLog(roomToJoin_name), 
-              pinnedPosts : roomToJoin.pinnedPosts,
-              message_count: false
-          });
-      });
+            {
+                room : id, 
+                posts : roomToJoin.posts, //insert chat history here?
+                // posts : chatLog.getTheLog(roomToJoin_name), 
+                pinnedPosts : roomToJoin.pinnedPosts,
+                message_count: false
+            });
+      }
 
 
         if(socket.fbUser != null){
@@ -250,7 +261,10 @@ function handleTag(data, sender, room, io){
       switch(data.type){
         case "message" :  
           rooms[data.roomid].addPost(data);
-          chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
+          if(rooms[data.roomid].visiblity === false){
+            console.log("saved");
+            chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
+          }
           handleTag(data, people[socket.id], rooms[data.roomid], io);
           break;
         case "pin" :
