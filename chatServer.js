@@ -193,8 +193,20 @@ function handleTag(data, sender, room, io){
             if (limit_history <= 0){
               limit_history = 0;
             }
-            for(var i = limit_history; i < val.length; i++){
-              rooms[id].addPost(val[i]);
+
+            //use underscore to see if person already exists
+            var counter = 0;
+            _.filter(people, function(person){ 
+              if(person.realname == people[socket.id].realname){
+                counter++;
+              }
+            });
+            //what if people already logged in? then itll add another 10 posts when they join the room.
+            //make sure you only addPosts once
+            if (counter === 1){
+              for(var i = limit_history; i < val.length; i++){
+                rooms[id].addPost(val[i]);
+              }
             }
 
             utils.sendToSelf(socket, 'roomPosts',
