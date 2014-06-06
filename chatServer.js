@@ -188,9 +188,12 @@ function handleTag(data, sender, room, io){
         console.log("go into here");
         //how to make this async......
         chatLog.getTheLog(roomToJoin_name, function(val){
-            console.log(val);
-
-            for(var i = 0; i < val.length; i++){
+            //display most recent 10 messages
+            var limit_history = val.length -10;
+            if (limit_history <= 0){
+              limit_history = 0;
+            }
+            for(var i = limit_history; i < val.length; i++){
               rooms[id].addPost(val[i]);
             }
 
