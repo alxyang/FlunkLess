@@ -349,15 +349,18 @@ function ChatAppCtrl($scope, $q, $modal, $http, $filter, socket) {
   })
 
   socket.on('roomPosts', function(data){
-    console.log(data + "wtf");
-    console.log(data.room + " roooom");
-    console.log(data.posts + "whatttt");
     angular.forEach($scope.currentRooms, function(room){
       if(data.room === room.id){
           if(room.id != $scope.viewPage){
-            console.log(data);
-            console.log(data.posts, room.posts);
-            room.messageQueue += data.posts.length - room.posts.length;
+            // console.log(data);
+            // console.log(data.posts, room.posts);
+            console.log(data.message_count + " not yet entered");
+            if(data.message_count === true){
+              console.log(data.message_count + " entered");
+              room.messageQueue += data.posts.length - room.posts.length;
+            } else{
+              room.messageQueue = 0;
+            }
           }
           room.posts = data.posts;
           room.pinnedPosts = data.pinnedPosts;

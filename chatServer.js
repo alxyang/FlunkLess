@@ -187,14 +187,22 @@ function handleTag(data, sender, room, io){
 
       //how to make this async......
       chatLog.getTheLog(roomToJoin_name, function(val){
+          console.log(val);
+
+          for(var i = 0; i < val.length; i++){
+            rooms[id].addPost(val[i]);
+          }
+
           utils.sendToSelf(socket, 'roomPosts',
           {
               room : id, 
-              posts : val, //insert chat history here?
+              posts : roomToJoin.posts, //insert chat history here?
               // posts : chatLog.getTheLog(roomToJoin_name), 
-              pinnedPosts : roomToJoin.pinnedPosts
+              pinnedPosts : roomToJoin.pinnedPosts,
+              message_count: false
           });
       });
+
 
         if(socket.fbUser != null){
           if(socket.fbUser.rooms.indexOf(id)< 0){
@@ -233,8 +241,9 @@ function handleTag(data, sender, room, io){
       }
     });
 
-    socket.on('send', function(data) {
+  socket.on('send', function(data) {
       //if no existing room
+      console.log(data.roomid + " is sendroom id");
       if(rooms[data.roomid] == null){
         return;
       }
@@ -268,7 +277,8 @@ function handleTag(data, sender, room, io){
         {
             room : data.roomid,
             posts : rooms[data.roomid].posts,
-            pinnedPosts : rooms[data.roomid].pinnedPosts
+            pinnedPosts : rooms[data.roomid].pinnedPosts,
+            message_count: true
         });  
       
   });

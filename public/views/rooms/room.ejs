@@ -27,8 +27,8 @@
                 </div>
                 <div class="panel-content">
                     <div id="general" class="frame">
-                        <ul style="height:250px;overflow:auto" scroll-if>
-                            <li class="list-unstyled" ng-repeat="post in room.posts" ng-cloak scroll-item ng-class="{dark: $index % 2 === 0}">
+                        <ul style="height:250px;overflow:auto" >
+                            <li class="list-unstyled" ng-repeat="post in room.posts"  ng-class="{dark: $index % 2 === 0}">
 				                <strong>{{post.name}}:</strong> {{post.message}}
                             </li>
                         </ul>
@@ -40,7 +40,7 @@
                             <select ng-model="room.writeMode" ng-options="mode for mode in modes"></select>
                         </div>
                         <input type="text" ng-model="urllink" ng-show="room.writeMode == 'Link'" placeholder="Place URL Link here" class="size5 input-control text"></input>
-                        <button ng-click="send(room.id, room.writeMode);getChatLog(room.name)">Submit</button>
+                        <button ng-click="send(room.id, room.writeMode);">Submit</button>
                     </form>
                     
                 </div>
