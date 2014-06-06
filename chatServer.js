@@ -185,7 +185,6 @@ function handleTag(data, sender, room, io){
         })
       }
       if(rooms[id].visibility === true){
-        console.log("go into here");
         //how to make this async......
         chatLog.getTheLog(roomToJoin_name, function(val){
             //display most recent 10 messages
@@ -202,7 +201,7 @@ function handleTag(data, sender, room, io){
               }
             });
             //what if people already logged in? then itll add another 10 posts when they join the room.
-            //make sure you only addPosts once
+            //make sure you only addPosts once if user is logged in from multiple accounts under the same fb identifier
             if (counter === 1){
               for(var i = limit_history; i < val.length; i++){
                 rooms[id].addPost(val[i]);
