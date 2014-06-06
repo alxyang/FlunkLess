@@ -184,7 +184,8 @@ function handleTag(data, sender, room, io){
           utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
         })
       }
-      if(rooms[id].visiblity === false){
+      if(rooms[id].visibility === true){
+        console.log("go into here");
         //how to make this async......
         chatLog.getTheLog(roomToJoin_name, function(val){
             console.log(val);
@@ -254,6 +255,7 @@ function handleTag(data, sender, room, io){
 
   socket.on('send', function(data) {
       //if no existing room
+      console.log(data);
       console.log(data.roomid + " is sendroom id");
       if(rooms[data.roomid] == null){
         return;
@@ -261,10 +263,7 @@ function handleTag(data, sender, room, io){
       switch(data.type){
         case "message" :  
           rooms[data.roomid].addPost(data);
-          if(rooms[data.roomid].visiblity === false){
-            console.log("saved");
-            chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
-          }
+          chatLog.saveToLog(rooms[data.roomid].name, data.name, data.message);
           handleTag(data, people[socket.id], rooms[data.roomid], io);
           break;
         case "pin" :
