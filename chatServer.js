@@ -24,6 +24,9 @@ module.exports = function(server) {
     classes.forEach(function(elm){
       rooms[elm.id] = new Room(elm.name, elm.id, null, true);
       rooms[elm.id].setCategory(elm.group);
+      chatLog.getTheLog(elm.name, function(val){
+        rooms[elm.id].posts = val.slice(val.length-10);
+      });
     });
   });
 
@@ -237,6 +240,7 @@ function handleTag(data, sender, room, io){
             });
           }
         }
+
       }
     });
 
