@@ -194,7 +194,7 @@ function handleTag(data, sender, room, io){
             }
 
             //use underscore to see if person already exists
-            var counter = 0;
+  /*          var counter = 0;
             _.filter(people, function(person){ 
               if(person.realname == people[socket.id].realname){
                 counter++;
@@ -206,7 +206,7 @@ function handleTag(data, sender, room, io){
               for(var i = limit_history; i < val.length; i++){
                 rooms[id].addPost(val[i]);
               }
-            }
+            }*/
 
             utils.sendToSelf(socket, 'roomPosts',
             {
@@ -228,7 +228,6 @@ function handleTag(data, sender, room, io){
                 message_count: false
             });
       }
-
 
         if(socket.fbUser != null){
           if(socket.fbUser.rooms.indexOf(id)< 0){
