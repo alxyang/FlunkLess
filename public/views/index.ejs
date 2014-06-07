@@ -2,7 +2,7 @@
 <html ng-app="chat">
 <%- include misc/header.ejs %>
 
-    <body class="metro" ng-controller="ChatAppCtrl" ng-cloak>
+    <body class="metro" ng-class="{'bg-transparent':!joined}" ng-controller="ChatAppCtrl" ng-cloak>
         <div class="grid fluid">
             <%- include misc/navbar.ejs %>
             <!-- Begin page content -->
