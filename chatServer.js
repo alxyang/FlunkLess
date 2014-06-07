@@ -187,29 +187,7 @@ function handleTag(data, sender, room, io){
           utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
         })
       }
-      if(rooms[id].visibility === true){
-        //how to make this async......
-        chatLog.getTheLog(roomToJoin_name, function(val){
-            //display most recent 10 messages
-            var limit_history = val.length -10;
-            if (limit_history <= 0){
-              limit_history = 0;
-            }
 
-            //use underscore to see if person already exists
-  /*          var counter = 0;
-            _.filter(people, function(person){ 
-              if(person.realname == people[socket.id].realname){
-                counter++;
-              }
-            });
-            //what if people already logged in? then itll add another 10 posts when they join the room.
-            //make sure you only addPosts once if user is logged in from multiple accounts under the same fb identifier
-            if (counter === 1){
-              for(var i = limit_history; i < val.length; i++){
-                rooms[id].addPost(val[i]);
-              }
-            }*/
 
             utils.sendToSelf(socket, 'roomPosts',
             {
@@ -219,19 +197,7 @@ function handleTag(data, sender, room, io){
                 pinnedPosts : roomToJoin.pinnedPosts,
                 message_count: false
             });
-        });
-      } else{
-          // if private room, we dont want to get the chat logs
-          utils.sendToSelf(socket, 'roomPosts',
-            {
-                room : id, 
-                posts : roomToJoin.posts, //insert chat history here?
-                // posts : chatLog.getTheLog(roomToJoin_name), 
-                pinnedPosts : roomToJoin.pinnedPosts,
-                message_count: false
-            });
-      }
-
+    
         if(socket.fbUser != null){
           if(socket.fbUser.rooms.indexOf(id)< 0){
             socket.fbUser.rooms.push(id);
@@ -327,7 +293,7 @@ function handleTag(data, sender, room, io){
 
   socket.on("inviteToChat", function(person){
     if(socket.id != person.socketid){
-      var room = createRoom("room " + anonRoomNo++, false, socket.id);
+      var room = createRoom("room " + uuid.v4(), false, socket.id);
       room.invitedUsers.push(person);
       room.invitedUsers.push(people[socket.id]);
       utils.sendToUser(io, socket.id, "invitedToRoom", room);
