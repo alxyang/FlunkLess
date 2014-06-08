@@ -9,3 +9,32 @@ html {
 .bg-transparent {
 	background-color: transparent;
 }
+
+nav a{
+  text-decoration:none !important;
+  cursor: pointer !important;
+}
+
+.search-form{
+  width: 100% !important;
+}
+
+.room-name{
+  margin-left: -14px !important;
+}
+
+.online-margin{
+  margin-left: -10px !important;
+}
+
+.panel-custom{
+  padding: 0 10px 0 10px !important;
+}
+
+.small-margin{
+  margin-bottom: 10px !important;
+}
+
+.metro form{
+  margin: 0px !important;
+}

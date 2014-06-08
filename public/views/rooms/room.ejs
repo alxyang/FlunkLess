@@ -1,8 +1,8 @@
 <div id="{{room.id}}" ng-show='viewPage == room.id' style="height:100%">
-    <h2>{{room.name}}</h2>
+    <h2 class = "room-name">{{room.name}}</h2>
     <div class="row">
         <div class="span9">
-            <div class="panel">
+            <div class="panel small-margin">
                 <div class="panel-header  bg-lightBlue fg-white">
                     Pinned Posts
                     <div class="button-set" style="float:right;">
@@ -25,17 +25,16 @@
                     Chat Room
                     <button class="primary" style="float: right;"><a href = "" ng-click="navView='chatLog';getChatLog(room.name)">Chat Log</a></button>
                 </div>
-                <div class="panel-content">
+                <div class="panel-content panel-custom">
                     <div id="general" class="frame">
-                        <ul style="height:250px;overflow:auto;margin-left:-16px" scroll-if>
+                        <ul style="height:259px;overflow:auto;margin-left:-16px" scroll-if>
                             <li class="list-unstyled" ng-repeat="post in room.posts" ng-cloak scroll-item ng-class="{dark: $index % 2 === 0}">
 				                <strong>{{post.name}}:</strong> {{post.message}}
                             </li>
                         </ul>
                     </div>
-                    <br>
                     <form class="input-control">
-                        <input class="input-control text size8" ng-model="message" name="message" id="message" on-focus="focus(true)" on-blur="focus(false)" type="text" value="" placeholder="Enter a Message..."></input>
+                        <input class="input-control text" ng-model="message" name="message" id="message" on-focus="focus(true)" on-blur="focus(false)" type="text" value="" placeholder="Enter a Message..."></input>
                         <div class="size2 input-control select">
                             <select ng-model="room.writeMode" ng-options="mode for mode in modes"></select>
                         </div>
@@ -50,7 +49,7 @@
             </div>
         </div>
         <div class="span3">
-            <div class="panel">
+            <div class="panel online-margin" >
                 <div class="panel-header  bg-lightBlue fg-white">People Online</div>
 
                 <div class="listview-outlook small" style="height:500px;">

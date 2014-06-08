@@ -4,7 +4,6 @@
     <div>
       <div class="table-responsive">
       <table class="table table-hover">
-        <thead><tr><b>Rooms</b><tr></thead>
         <tbody>
         <tr ng-repeat="room in rooms | filter : {name : roomname} | filter: addedInRoom" ng-cloak>
       		<td class="table-list" ng-click='addRoom(room)'>
