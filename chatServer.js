@@ -291,8 +291,10 @@ function handleTag(data, sender, room, io){
   });
 
   socket.on("inviteToChat", function(person){
+    console.log(person.name);
+    console.log(people[socket.id].name);
     if(socket.id != person.socketid){
-      var room = createRoom("room " + uuid.v4(), false, socket.id);
+      var room = createRoom("Private Room " + uuid.v4(), false, socket.id);
       room.invitedUsers.push(person);
       room.invitedUsers.push(people[socket.id]);
       utils.sendToUser(io, socket.id, "invitedToRoom", room);

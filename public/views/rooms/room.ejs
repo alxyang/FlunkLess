@@ -27,7 +27,7 @@
                 </div>
                 <div class="panel-content">
                     <div id="general" class="frame">
-                        <ul style="height:250px;overflow:auto" scroll-if>
+                        <ul style="height:250px;overflow:auto;margin-left:-16px" scroll-if>
                             <li class="list-unstyled" ng-repeat="post in room.posts" ng-cloak scroll-item ng-class="{dark: $index % 2 === 0}">
 				                <strong>{{post.name}}:</strong> {{post.message}}
                             </li>

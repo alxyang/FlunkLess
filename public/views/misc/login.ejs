@@ -42,7 +42,7 @@
                     name="username" 
                     placeholder="Enter Name" 
                     ng-minlength=5 
-                    ng-maxlength=20 
+                    ng-maxlength=15 
                     required />
                 </div>
                 <button id = "myButton" type="submit" class="bg-lightBlue fg-white" ng-disabled="signup_form.$invalid">Log in</button>
@@ -59,7 +59,7 @@
                     </small>
                     <small class="error" 
                             ng-show="signup_form.username.$error.maxlength">
-                            Your name cannot be longer than 20 characters
+                            Your name cannot be longer than 15 characters
                     </small>
                   </div>
                   </fieldset>
