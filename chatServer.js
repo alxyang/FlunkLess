@@ -187,14 +187,6 @@ function handleTag(data, sender, room, io){
           utils.sendToUser(io, person.socketid, "roomData", {room : id+"", people : peopleIn});
         })
       }
-      if(rooms[id].visibility === true){
-        //how to make this async......
-        chatLog.getTheLog(roomToJoin_name, function(val){
-            //display most recent 10 messages
-            var limit_history = val.length -10;
-            if (limit_history <= 0){
-              limit_history = 0;
-            }
 
             utils.sendToSelf(socket, 'roomPosts',
             {
@@ -204,19 +196,7 @@ function handleTag(data, sender, room, io){
                 pinnedPosts : roomToJoin.pinnedPosts,
                 message_count: false
             });
-        });
-      } else{
-          // if private room, we dont want to get the chat logs
-          utils.sendToSelf(socket, 'roomPosts',
-            {
-                room : id, 
-                posts : roomToJoin.posts, //insert chat history here?
-                // posts : chatLog.getTheLog(roomToJoin_name), 
-                pinnedPosts : roomToJoin.pinnedPosts,
-                message_count: false
-            });
-      }
-
+    
         if(socket.fbUser != null){
           if(socket.fbUser.rooms.indexOf(id)< 0){
             socket.fbUser.rooms.push(id);
@@ -312,7 +292,7 @@ function handleTag(data, sender, room, io){
 
   socket.on("inviteToChat", function(person){
     if(socket.id != person.socketid){
-      var room = createRoom("room " + anonRoomNo++, false, socket.id);
+      var room = createRoom("room " + uuid.v4(), false, socket.id);
       room.invitedUsers.push(person);
       room.invitedUsers.push(people[socket.id]);
       utils.sendToUser(io, socket.id, "invitedToRoom", room);
