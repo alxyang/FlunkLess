@@ -32,7 +32,7 @@
                  Please enter your screenname below and log in to begin. This app requires Facebook to access credentials.
             </p>
             <br>
-            <form name="signup_form" class="form-inline" role="form" ng-submit='FBLogin()' novalidate >
+            <form name="signup_form" class="form-inline" role="form" onsubmit="document.getElementById('myButton').disabled=true;" ng-submit='FBLogin()' novalidate >
                   <fieldset>
                 <div class="form-group">
                     <input type="text" 
@@ -45,7 +45,7 @@
                     ng-maxlength=20 
                     required />
                 </div>
-                <button type="submit" class="bg-lightBlue fg-white" ng-disabled="signup_form.$invalid">Log in</button>
+                <button id = "myButton" type="submit" class="bg-lightBlue fg-white" ng-disabled="signup_form.$invalid">Log in</button>
                 <!-- <button type="submit" class="bg-lightBlue fg-white" ng-click='joinServer()'>Log in (admin)</button> -->
                 <p ng-show="loading">Loading...</p>
                   <div class="error-container" ng-show="signup_form.username.$invalid && signup_form.username.$dirty">
