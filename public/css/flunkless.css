@@ -1,4 +1,4 @@
-html {
+.bg-green {
 	background: url(background.jpg) no-repeat center center fixed;
 	-webkit-background-size: cover;
   	-moz-background-size: cover;
@@ -6,9 +6,6 @@ html {
   	background-size: cover;
 }
 
-.bg-transparent {
-	background-color: transparent;
-}
 
 nav a{
   text-decoration:none !important;
@@ -38,3 +35,8 @@ nav a{
 .metro form{
   margin: 0px !important;
 }
+
+.metro .grid{
+  margin-bottom: 0px !important;
+}
+
