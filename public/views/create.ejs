@@ -20,6 +20,9 @@
 				    	<button class="btn-clear"></button>
 					</div>
 			</div>
+			<div ng-hide="modifyRoom.status=='New'">
+				<legend>Modify {{modifyRoom.name}}</legend>
+			</div>
 			<label>Invite Users</label>
 			Users you've invited will be sent a request to join your room. They can accept or decline.
 			<div class="input-control text">

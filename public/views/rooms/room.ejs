@@ -57,14 +57,14 @@
                         <a href="#" class="list" ng-click="invitePerson(person)">
                             <div class="list-content">
                                 <img style="width:60px; height:60px;"
-                                ng-src="http://www.catster.com/files/20121018-catster-pusheen-costume-{{$index+1}}.jpg" class="icon" />
+                                ng-src="http://www.catster.com/files/20121018-catster-pusheen-costume-{{($index+1)%5}}.jpg" class="icon" />
                                 <div class="data">{{person.name}}</div>
                             </div>
                         </a>
                     </div>
                     <a href="#" class="list bg-gray fg-white">
-                        <div class="list-content">
-                            <div ng-click="leaveRoom(room)" class="data">Leave Room</div>
+                        <div class="list-content data" ng-click="leaveRoom(room)">
+                            <div class="text-center">Leave Room</div>
                         </div>
                     </a>
                     
